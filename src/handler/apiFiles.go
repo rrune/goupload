@@ -42,6 +42,10 @@ func (h handler) Upload(c *fiber.Ctx) error {
 				err = c.SaveFile(file, "../data/uploads/"+file.Filename)
 			}
 		}
+		if claims["onetime"].(bool) {
+			err = h.DB.Users.RemoveUserByUsername(claims["username"].(string))
+			c.ClearCookie("JWT")
+		}
 	}
 	if util.Check(err) {
 		return c.Render("response", fiber.Map{
