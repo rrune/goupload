@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+:root {
+    --background: #1b1b1b;
+    --background-accent: #242424;
+    --background-accent-accent: #2e2e2e;
+    --font: #ebebeb;
+    --font-hover: #ababab;
+    --link: #893cd9;
+    --link-hover: #7626c9;
+    --hover: #282828;
+    --border: #b3b3b3;
+    --red: #FF6E6E;
+}
+
+a {
+    color: var(--link);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--link-hover);
+    text-decoration: none;
+}
+
+input,
+select {
+    padding: 10px 20px;
+    margin: 8px 0;
+    border: 2px solid var(--border);
+    text-decoration: none;
+    box-sizing: border-box;
+    font-size: 12px;
+    border-radius: 30px;
+    background-color: var(--background);
+    color: var(--font);
+    margin: 5px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+input:focus {
+    outline: 0px;
+}
+
+input[type=button]:hover,
+input[type=submit]:hover,
+input[type=reset]:hover {
+    background-color: var(--hover);
+    cursor: pointer;
+}
+
+body {
+    height: 100%;
+    background-color: var(--background);
+    color: var(--font);
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+/* standart form */
+
+.form {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+    -ms-user-select: None;
+    -moz-user-select: None;
+    -webkit-user-select: None;
+}
+
+
+/* sidebar top left */
+
+.sidebar {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 5%;
+    margin: 1%;
+    user-select: none;
+    -ms-user-select: None;
+    -moz-user-select: None;
+    -webkit-user-select: None;
+    transition: 200ms ease;
+}
+
+.sidebar a {
+    color: var(--font);
+}
+
+.sidebar a:hover {
+    color: var(--font-hover);
+    margin-right: 5px;
+}
+
+
+/* A box */
+
+.box {
+    background-color: var(--background-accent);
+    width: 24%;
+    min-width: 300px;
+    margin: 10px;
+    padding: 10px 30px;
+    padding-bottom: 30px;
+}
+
+.box-content {
+    position: relative;
+}
+
+.box h3 {
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    font-size: 1.15rem;
+    user-select: none;
+    -ms-user-select: None;
+    -moz-user-select: None;
+    -webkit-user-select: None;
+}
+
+.box .entry {
+    background-color: var(--background-accent-accent);
+    padding: 10px 15px;
+    margin-top: 3%;
+}

@@ -1,0 +1,10 @@
+version: "3"
+services:
+  web:
+    build: ./
+    container_name: uploader
+    ports:
+      - "12344:3000"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<script>
+  function changeScreen() {
+    document.getElementById("content").style.display = "none";
+    document.getElementById("spinner").style.display = "block";
+  }
+</script>
+
+<head>
+  <meta charset="utf-8">
+  <title>Uploader</title>
+  <link rel="stylesheet" href="./css/master.css">
+  <link rel="stylesheet" href="./css/index.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="./assets/favicon.ico">
+</head>
+
+<body>
+  <div id="content">
+    <div class="sidebar">
+      <a href="logout.php">Logout</a>
+      <?php if ($root == true) {
+        echo '<a href="manage/">Manage</a>';
+      } ?>
+    </div>
+    <div class="welcome">
+      Welcome,<br>
+      <b><?php echo $_SESSION['UserData']['Username'] ?></b>
+    </div>
+    <form class="form" action="upload.php" method="post" enctype="multipart/form-data">
+      <div>
+        <input type="file" name="fileToUpload" id="fileToUpload" required>
+        <?php
+        if ($blind == true) {
+          echo '<input type="checkbox" id="blind" name="blind" value="blind">';
+          echo '<label for="blind">Blind</label>';
+        }
+        ?>
+      </div>
+      <input type="submit" value="Upload" name="submit" onclick="changeScreen()">
+    </form>
+  </div>
+  <div class="spinner" id="spinner">
+    <div class="loader">Loading...</div>
+  </div>
+</body>
+
+</html>

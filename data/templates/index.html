@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<script>
+  function changeScreen() {
+    document.getElementById("content").style.display = "none";
+    document.getElementById("spinner").style.display = "block";
+  }
+</script>
+
+<head>
+  <meta charset="utf-8">
+  <title>Uploader</title>
+  <link rel="stylesheet" href="/static/css/master.css">
+  <link rel="stylesheet" href="/static/css/index.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/static/assets/favicon.ico">
+</head>
+
+<body>
+  <div id="content">
+    <div class="sidebar">
+      <a href="logout.php">Logout</a>
+      {{if .Root}}
+        <a href="manage/">Manage</a>
+      {{end}}
+    </div>
+    <div class="welcome">
+      Welcome,<br>
+      <b>{{.Username}}</b>
+    </div>
+    <form class="form" action="upload" method="post" enctype="multipart/form-data">
+      <div>
+        <input type="file" name="file" id="file" required>
+        {{if .Blind}}
+          <input type="checkbox" id="blind" name="blind" value="blind">
+          <label for="blind">Blind</label>
+        {{end}}
+      </div>
+      <input type="submit" value="Upload" name="submit" onclick="changeScreen()">
+    </form>
+  </div>
+  <div class="spinner" id="spinner">
+    <div class="loader">Loading...</div>
+  </div>
+</body>
+
+</html>

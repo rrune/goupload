@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Manage</title>
+  <link rel="stylesheet" href="/static/css/master.css">
+  <link rel="stylesheet" href="/static/css/manage.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/static/assets/favicon.ico">
+</head>
+
+<body>
+  <div class="content">
+    <div class="box">
+      <h3>FILES</h3>
+      <div class="box-content">
+        <form action="filterUser.php" method="post">
+          Filter per user: <br>
+          <select name="username" required>
+            {{range .Users}}
+                <option value="{{.Username}}">{{.Username}}</option>
+            {{end}}
+          </select>
+          <input type="submit" name="submit" value="Filter">
+        </form>
+        {{range .Files}}
+            <div class='entry'>
+                <b>File</b>: {{.File}}<br>
+                <b>Author</b>: {{.Author}}<br>
+                <b>Timestamp</b>: {{.Timestamp}}<br>
+                <b>Link</b>: <a href="{{$.Url}}{{.Short}}">{{$.Url}}{{.Short}}</a><br>
+                <a href='{{$.Url}}manage/details?short={{.Short}}'>Details</a> |
+                <a href='{{$.Url}}manage/moveToBlind?short={{.Short}}'>Move to blind</a> |
+                <a href='{{$.Url}}manage/removeFile?short={{.Short}}'>Remove File</a>
+            </div>
+        {{end}}
+      </div>
+    </div>
+    <div class="box">
+      <h3>USERS</h3>
+      <div class="box-content">
+        {{range .Users}}
+            <div class='entry'>
+                <b>Username</b>: {{.Username}}<br>
+                <b>Root</b>: {{.Root}}<br>
+                <b>Blind</b>: {{.Blind}}<br>
+                <b>Onetime</b>: {{.Onetime}}<br>
+                <a href='{{$.Url}}manage/removeUser?username={{.Username}}'>Remove User</a>
+            </div>
+        {{end}}
+      </div>
+    </div>
+    <div class="box">
+      <h3>CREATE USER</h3>
+      <div class="box-content">
+        <b>Root</b>: Can see and use this page<br>
+        <b>Blind</b>: Can upload files blind, different directory and not in database<br>
+        <b>Onetime</b>: User will be removed after uploading a file<br>
+        <br>
+        <form class="addUser" action="addUser" method="post">
+          <input type="text" name="username" placeholder="Username" required>
+          <input type="text" name="password" placeholder="Password" required>
+          <div>
+            <input type="checkbox" name="root" value="root" id="root">
+            <label for="root">Root</label>
+            <input type="checkbox" name="blind" value="blind" id="blind">
+            <label for="blind">Blind</label>
+          </div>
+          <div>
+            <input type="checkbox" name="onetime" value="onetime" id="onetime">
+            <label for="onetime">Onetime</label>
+          </div>
+          <input type="submit" name="submit" value="Create">
+        </form>
+      </div>
+      <h3>CHANGE PASSWORD</h3>
+      <div class="box-content">
+        <form action="changePassword" method="post">
+          <select name="username" required>
+            {{range .Users}}
+                <option value="{{.Username}}">{{.Username}}</option>
+            {{end}}
+          </select>
+          <br>
+          <input type="text" name="password" placeholder="New Password">
+          <input type="submit" name="submit" value="Change">
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <a href="/logout">Logout</a>
+    <a href="/">Home</a>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    position: relative;
+    top: 10vh;
+}
+
+.addUser {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: stretch;
+    user-select: none;
+    -ms-user-select: None;
+    -moz-user-select: None;
+    -webkit-user-select: None;
+}
+
+.box-content {
+    max-height: 75vh;
+    overflow: auto;
+}
