@@ -44,6 +44,11 @@ func (h handler) HandleLogin(c *fiber.Ctx) error {
 	}
 }
 
+func (h handler) Logout(c *fiber.Ctx) error {
+	c.ClearCookie("JWT")
+	return c.Redirect("/login")
+}
+
 func (h handler) AddUser(c *fiber.Ctx) error {
 	formUser := new(models.UserFromForm)
 	if err := c.BodyParser(formUser); err != nil {

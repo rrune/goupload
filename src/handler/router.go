@@ -38,6 +38,8 @@ func Start(port string, jwtkey string, url string, db database.Database) {
 	app.Post("/login", handler.HandleLogin)
 	app.Get("/login", template.Login)
 
+	app.Get("/logout", handler.Logout)
+
 	app.Get("/", auth, template.Index)
 	app.Post("/upload", auth, handler.Upload)
 
@@ -56,6 +58,7 @@ func Start(port string, jwtkey string, url string, db database.Database) {
 	manage.Get("/removeFile", handler.RemoveFile)
 	manage.Get("/moveToBlind", handler.MoveToBlind)
 	manage.Get("/details", handler.Details)
+	manage.Post("/filterUser", template.Filter)
 
 	manage.Get("/removeUser", handler.RemoveUser)
 	manage.Post("/addUser", handler.AddUser)
