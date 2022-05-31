@@ -65,14 +65,22 @@ func (h handler) Upload(c *fiber.Ctx) error {
 
 func (h handler) RemoveFile(c *fiber.Ctx) error {
 	short := c.Query("short", "")
-	err := h.DB.Files.RemoveFileByShort(short)
-	if util.Check(err) {
-		return c.Render("response", fiber.Map{
-			"Text": "Could not remove " + short,
-		})
+	file, err := h.DB.Files.GetFileByShort(short)
+	if err == nil {
+
+		err = os.Remove("../data/uploads/" + file.File)
+		if err == nil {
+
+			err = h.DB.Files.RemoveFileByShort(short)
+			if err == nil {
+				return c.Render("response", fiber.Map{
+					"Text": "Removed " + short,
+				})
+			}
+		}
 	}
 	return c.Render("response", fiber.Map{
-		"Text": "Removed " + short,
+		"Text": "Could not remove " + short,
 	})
 }
 
