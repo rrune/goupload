@@ -29,5 +29,5 @@ func main() {
 
 	db := database.New(config)
 
-	handler.Start(config.Port, config.JWTKey, config.Url, db)
+	handler.Start(config.Port, config.JWTKey, config.Url, config.UploadLimit, db)
 }

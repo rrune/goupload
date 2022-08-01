@@ -6,3 +6,4 @@ password: <database password>
 address: tcp(<ip>:<port>)/<database>
 jwtkey: secret # key to encrypt jwt keys
 shortlength: 5 # length of the download shorts
+uploadLimit: 2048 # in MB

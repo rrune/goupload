@@ -11,6 +11,7 @@ type Config struct {
 	Address     string `yaml:"address"`
 	JWTKey      string `yaml:"jwtkey"`
 	ShortLength int    `yaml:"shortlength"`
+	UploadLimit int    `yaml:"uploadLimit"`
 }
 
 type User struct {
