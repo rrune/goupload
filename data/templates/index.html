@@ -1,12 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<script>
-  function changeScreen() {
-    document.getElementById("content").style.display = "none";
-    document.getElementById("spinner").style.display = "block";
-  }
-</script>
-
 <head>
   <meta charset="utf-8">
   <title>Uploader</title>
@@ -28,7 +21,7 @@
       Welcome,<br>
       <b>{{.Username}}</b>
     </div>
-    <form class="form" action="upload" method="post" enctype="multipart/form-data">
+    <form id="upload" class="form" action="upload" method="post" enctype="multipart/form-data">
       <div>
         <input type="file" name="file" id="file" required>
         {{if .Blind}}
@@ -39,9 +32,68 @@
       <input type="submit" value="Upload" name="submit" onclick="changeScreen()">
     </form>
   </div>
-  <div class="spinner" id="spinner">
-    <div class="loader">Loading...</div>
+  <div id="progresswrapper">
+    <label for="progressbar">Upload progress:</label>
+    <progress id="progressbar" value="0" max="100"> 0% </progress>
+    <div id="progress"></div>
   </div>
 </body>
+
+<script defer>
+  function changeScreen() {
+    document.getElementById("content").style.display = "none";
+  }
+
+  //https://stackoverflow.com/questions/25668771/track-basic-html-form-post-progress
+  function enhanceFormWithUploadProgress(form, progressbar, progress) {
+  //form : the HTML form element to enhance.
+  //progress : an HTML element that will display upload progress.
+
+    //testing browser support. if no support for the required js APIs, the form will just be posted naturally with no progress showing.
+    var xhr = new XMLHttpRequest();
+    if (!(xhr && ('upload' in xhr) && ('onprogress' in xhr.upload)) || !window.FormData) {
+        return;
+    }
+
+    form.addEventListener('submit', function(e) {
+        //prevent regular form posting
+        e.preventDefault();
+
+        xhr.upload.addEventListener('loadstart', function(event) {
+            //initializing the progress indicator (here we're displaying an element that was hidden)
+            document.getElementById("progresswrapper").style.display = 'flex';
+        }, false);
+
+        xhr.upload.addEventListener('progress', function(event) {
+            //displaying the progress value as text percentage, may instead update some CSS to show a bar
+            var percent = (100 * event.loaded / event.total);
+            progressbar.value = percent
+            progress.innerHTML = percent.toFixed(2) + '%';
+        }, false);
+
+        xhr.upload.addEventListener('load', function(event) {
+            //this will be displayed while the server is handling the response (all upload data has been transmitted by now)
+            progress.innerHTML = 'Completed, waiting for response...';
+        }, false);
+
+        xhr.addEventListener('readystatechange', function(event) {
+            if (event.target.readyState == 4 && event.target.responseText) {
+                //we got a response from the server and we're replacing the whole current document content with it, simulating a page reload
+                var newDocument = document.open('text/html', 'replace');
+                newDocument.write(event.target.responseText);
+                newDocument.close();
+            } else {
+                throw new Error('Error in the response.');
+            }
+        }, false);
+
+        //posting the form with the same method and action as specified by the HTML markup
+        xhr.open(this.getAttribute('method'), this.getAttribute('action'), true);
+        xhr.send(new FormData(this));
+    });
+};
+
+enhanceFormWithUploadProgress(document.getElementById("upload"), document.getElementById("progressbar"), document.getElementById("progress"))
+</script>
 
 </html>
