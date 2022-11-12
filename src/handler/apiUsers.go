@@ -64,7 +64,7 @@ func (h handler) AddUser(c *fiber.Ctx) error {
 		Root:       formUser.Root == "root",
 		Blind:      formUser.Blind == "blind",
 		Onetime:    formUser.Onetime == "onetime",
-		Restricted: formUser.Onetime == "restricted",
+		Restricted: formUser.Restricted == "restricted",
 	}
 
 	err := h.DB.Users.CreateUser(&user)
