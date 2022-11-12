@@ -9,6 +9,9 @@ import (
 
 func (h handler) HandleLogin(c *fiber.Ctx) error {
 	CallbackPath := c.Query("path", "")
+	if CallbackPath == "" {
+		CallbackPath = "/"
+	}
 
 	l := new(models.Login)
 	if err := c.BodyParser(l); err != nil {
