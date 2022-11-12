@@ -8,22 +8,25 @@ import (
 )
 
 func (h handler) HandleLogin(c *fiber.Ctx) error {
+	CallbackPath := c.Query("path", "")
+
 	l := new(models.Login)
 	if err := c.BodyParser(l); err != nil {
 		return err
 	}
 	user, err := h.DB.Users.GetUserByUsername(l.Username)
 	if util.Check(err) {
-		return c.Redirect("/login?msg=Wrong username or password")
+		return c.Redirect("/login?msg=Wrong username or password&path=" + CallbackPath)
 	}
 	correct := util.DoPasswordsMatch(user.Password, l.Password)
 
 	if correct {
 		claims := jwt.MapClaims{
-			"username": user.Username,
-			"root":     user.Root,
-			"blind":    user.Blind,
-			"onetime":  user.Onetime,
+			"username":   user.Username,
+			"root":       user.Root,
+			"blind":      user.Blind,
+			"onetime":    user.Onetime,
+			"restricted": user.Restricted,
 		}
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 		t, err := token.SignedString([]byte(h.JwtKey))
@@ -38,9 +41,9 @@ func (h handler) HandleLogin(c *fiber.Ctx) error {
 		}
 		c.Cookie(&cookie)
 
-		return c.Redirect("/")
+		return c.Redirect(CallbackPath)
 	} else {
-		return c.Redirect("/login?msg=Wrong username or password")
+		return c.Redirect("/login?msg=Wrong username or password&path=" + CallbackPath)
 	}
 }
 
@@ -56,11 +59,12 @@ func (h handler) AddUser(c *fiber.Ctx) error {
 	}
 
 	user := models.User{
-		Username: formUser.Username,
-		Password: formUser.Password,
-		Root:     formUser.Root == "root",
-		Blind:    formUser.Blind == "blind",
-		Onetime:  formUser.Onetime == "onetime",
+		Username:   formUser.Username,
+		Password:   formUser.Password,
+		Root:       formUser.Root == "root",
+		Blind:      formUser.Blind == "blind",
+		Onetime:    formUser.Onetime == "onetime",
+		Restricted: formUser.Onetime == "restricted",
 	}
 
 	err := h.DB.Users.CreateUser(&user)

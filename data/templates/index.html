@@ -31,6 +31,10 @@
           <input type="checkbox" id="blind" name="blind" value="blind">
           <label for="blind">Blind</label>
         {{end}}
+        {{if .Restricted}}
+          <input type="checkbox" id="restricted" name="restricted" value="restricted">
+          <label for="restricted">Restricted</label>
+        {{end}}
       </div>
       <input type="submit" value="Upload" name="submit" onclick="changeScreen()">
     </form>

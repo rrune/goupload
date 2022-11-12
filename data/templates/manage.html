@@ -29,6 +29,7 @@
                 <b>File</b>: {{.File}}<br>
                 <b>Author</b>: {{.Author}}<br>
                 <b>Timestamp</b>: {{.Timestamp}}<br>
+                <b>Restricted</b>: {{.Restricted}}<br>
                 <b>Link</b>: <a href="{{$.Url}}{{.Short}}">{{$.Url}}{{.Short}}</a><br>
                 <a href='{{$.Url}}manage/details?short={{.Short}}'>Details</a> |
                 <a href='{{$.Url}}manage/moveToBlind?short={{.Short}}'>Move to blind</a> |
@@ -45,6 +46,7 @@
                 <b>Username</b>: {{.Username}}<br>
                 <b>Root</b>: {{.Root}}<br>
                 <b>Blind</b>: {{.Blind}}<br>
+                <b>Restricted</b>: {{.Restricted}}<br>
                 <b>Onetime</b>: {{.Onetime}}<br>
                 <a href='{{$.Url}}manage/removeUser?username={{.Username}}'>Remove User</a>
             </div>
@@ -56,6 +58,7 @@
       <div class="box-content">
         <b>Root</b>: Can see and use this page<br>
         <b>Blind</b>: Can upload files blind, different directory and not in database<br>
+        <b>Restricted</b>: Can upload files that need login to download<br>
         <b>Onetime</b>: User will be removed after uploading a file<br>
         <br>
         <form class="addUser" action="/manage/addUser" method="post">
@@ -68,6 +71,8 @@
             <label for="blind">Blind</label>
           </div>
           <div>
+            <input type="checkbox" name="restricted" value="restricted" id="restricted">
+            <label for="restricted">Restricted</label>
             <input type="checkbox" name="onetime" value="onetime" id="onetime">
             <label for="onetime">Onetime</label>
           </div>

@@ -28,7 +28,7 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 
 	auth := jwtware.New(jwtware.Config{
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
-			return c.Redirect("/login")
+			return c.Redirect("/login?path=" + c.Path())
 		},
 		TokenLookup:   "cookie:JWT",
 		SigningKey:    []byte(jwtkey),
@@ -66,6 +66,7 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 	manage.Post("/changePassword", handler.ChangePassword)
 
 	app.Get("/:short", handler.Download)
+	app.Get("/r/:short", auth, handler.DownloadRestricted)
 
 	app.Listen(":" + port)
 }

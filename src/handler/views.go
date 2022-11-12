@@ -18,9 +18,10 @@ func (t template) Index(c *fiber.Ctx) error {
 	claims := user.Claims.(jwt.MapClaims)
 
 	return c.Render("index", fiber.Map{
-		"Username": claims["username"].(string),
-		"Root":     claims["root"].(bool),
-		"Blind":    claims["blind"].(bool),
+		"Username":   claims["username"].(string),
+		"Root":       claims["root"].(bool),
+		"Blind":      claims["blind"].(bool),
+		"Restricted": claims["restricted"].(bool),
 	})
 }
 

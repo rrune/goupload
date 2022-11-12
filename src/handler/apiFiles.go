@@ -14,6 +14,20 @@ import (
 func (h handler) Download(c *fiber.Ctx) error {
 	file, err := h.DB.Files.GetFileByShort(c.Params("short"))
 	if err == nil {
+		if file.Restricted {
+			return c.Redirect("/r/" + c.Params("short"))
+		}
+
+		return c.Download("../data/uploads/" + file.File)
+	}
+	return c.Render("response", fiber.Map{
+		"Text": "Short does not exist",
+	})
+}
+
+func (h handler) DownloadRestricted(c *fiber.Ctx) error {
+	file, err := h.DB.Files.GetFileByShort(c.Params("short"))
+	if err == nil {
 		return c.Download("../data/uploads/" + file.File)
 	}
 	return c.Render("response", fiber.Map{
@@ -27,16 +41,24 @@ func (h handler) Upload(c *fiber.Ctx) error {
 
 	var short string
 	file, err := c.FormFile("file")
+
+	restricted := false
+	restrictedStr := c.FormValue("restricted")
+	if restrictedStr == "restricted" {
+		restricted = true
+	}
+
 	blind := c.FormValue("blind")
 	if err == nil {
 		if blind == "blind" {
 			err = c.SaveFile(file, "../data/blind/"+file.Filename)
 		} else {
 			short, err = h.DB.Files.AddNewFile(models.File{
-				File:      file.Filename,
-				Author:    claims["username"].(string),
-				Timestamp: time.Now(),
-				Ip:        c.IP(),
+				File:       file.Filename,
+				Author:     claims["username"].(string),
+				Timestamp:  time.Now(),
+				Ip:         c.IP(),
+				Restricted: restricted,
 			})
 			if err == nil {
 				err = c.SaveFile(file, "../data/uploads/"+file.Filename)
