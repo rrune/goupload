@@ -41,7 +41,7 @@ func (t template) Manage(c *fiber.Ctx) error {
 	})
 }
 
-func (t template) Filter(c *fiber.Ctx) error {
+func (t template) HandleFilter(c *fiber.Ctx) error {
 	user := new(models.User)
 	if err := c.BodyParser(user); err != nil {
 		return err

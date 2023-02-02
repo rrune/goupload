@@ -1,8 +1,11 @@
 package handler
 
 import (
+	"encoding/base64"
+	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -11,7 +14,7 @@ import (
 	"github.com/rrune/goupload/util"
 )
 
-func (h handler) Download(c *fiber.Ctx) error {
+func (h handler) HandleDownload(c *fiber.Ctx) error {
 	file, err := h.DB.Files.GetFileByShort(c.Params("short"))
 	if err == nil {
 		if file.Restricted {
@@ -25,7 +28,7 @@ func (h handler) Download(c *fiber.Ctx) error {
 	})
 }
 
-func (h handler) DownloadRestricted(c *fiber.Ctx) error {
+func (h handler) HandleDownloadRestricted(c *fiber.Ctx) error {
 	file, err := h.DB.Files.GetFileByShort(c.Params("short"))
 	if err == nil {
 		return c.Download("../data/uploads/" + file.File)
@@ -35,57 +38,114 @@ func (h handler) DownloadRestricted(c *fiber.Ctx) error {
 	})
 }
 
-func (h handler) Upload(c *fiber.Ctx) error {
+func (h handler) Upload(c *fiber.Ctx, username string, blindPerms bool, restrictedPerms bool, onetime bool, callback func(filename string, short string, blind bool) error) error {
+	blind := c.FormValue("blind") == "blind"
+	if blind && !blindPerms { // if blind is requested but not permitted
+		return c.SendStatus(405)
+	}
+
+	restricted := c.FormValue("restricted") == "restricted"
+	if restricted && !restrictedPerms { // if restricted is requested but not permitted
+		return c.SendStatus(405)
+	}
+
+	file, err := c.FormFile("file")
+	if err != nil {
+		return c.SendString("No file given")
+	}
+
+	var short string
+	switch blind {
+	case true:
+		err = c.SaveFile(file, "../data/blind/"+file.Filename)
+		fmt.Println(err)
+
+	case false:
+		short, err = h.DB.Files.AddNewFile(models.File{
+			File:       file.Filename,
+			Author:     username,
+			Timestamp:  time.Now(),
+			Ip:         c.IP(),
+			Restricted: restricted,
+		})
+		if err == nil {
+			err = c.SaveFile(file, "../data/uploads/"+file.Filename)
+		}
+
+	}
+	if err != nil {
+		return c.SendStatus(500)
+	}
+
+	if onetime {
+		h.DB.Users.RemoveUserByUsername(username)
+		c.ClearCookie("JWT")
+	}
+
+	return callback(file.Filename, short, blind)
+}
+
+func (h handler) HandleUploadWeb(c *fiber.Ctx) error {
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 
-	var short string
-	file, err := c.FormFile("file")
+	username := claims["username"].(string)
+	blind := claims["blind"].(bool)
+	restricted := claims["restricted"].(bool)
+	onetime := claims["onetime"].(bool)
 
-	restricted := false
-	restrictedStr := c.FormValue("restricted")
-	if restrictedStr == "restricted" {
-		restricted = true
-	}
-
-	blind := c.FormValue("blind")
-	if err == nil {
-		if blind == "blind" {
-			err = c.SaveFile(file, "../data/blind/"+file.Filename)
-		} else {
-			short, err = h.DB.Files.AddNewFile(models.File{
-				File:       file.Filename,
-				Author:     claims["username"].(string),
-				Timestamp:  time.Now(),
-				Ip:         c.IP(),
-				Restricted: restricted,
+	return h.Upload(c, username, blind, restricted, onetime, func(filename, short string, blind bool) error {
+		if blind {
+			return c.Render("response", fiber.Map{
+				"Text": "Uploaded " + filename,
 			})
-			if err == nil {
-				err = c.SaveFile(file, "../data/uploads/"+file.Filename)
-			}
 		}
-		if claims["onetime"].(bool) {
-			err = h.DB.Users.RemoveUserByUsername(claims["username"].(string))
-			c.ClearCookie("JWT")
-		}
-	}
-	if util.Check(err) {
 		return c.Render("response", fiber.Map{
-			"Text": "Could not upload your file",
+			"Text": "Uploaded " + filename,
+			"Link": h.Url + short,
 		})
-	}
-	if blind == "blind" {
-		return c.Render("response", fiber.Map{
-			"Text": "Uploaded " + file.Filename,
-		})
-	}
-	return c.Render("response", fiber.Map{
-		"Text": "Uploaded " + file.Filename,
-		"Link": h.Url + short,
 	})
 }
 
-func (h handler) RemoveFile(c *fiber.Ctx) error {
+// simpler upload to use with curl
+func (h handler) HandleUploadSimple(c *fiber.Ctx) error {
+	// uses simple auth, there are no other permission checks prior to this one
+	authBase64 := strings.Split(c.Get("Authorization"), " ")
+
+	// The slice's length needs to be 2, otherwise the header was empty
+	if len(authBase64) < 2 {
+		c.SendString("No Authorization given")
+	}
+	// [0] of slice is "Basic"
+	authByte, err := base64.StdEncoding.DecodeString(authBase64[1])
+	if err != nil {
+		return c.SendStatus(500)
+	}
+	//basic auth is formated username:password
+	auth := strings.Split(string(authByte), ":")
+	if len(auth) != 2 {
+		return c.SendString("Malformed Authorization header")
+	}
+	username := auth[0]
+	password := auth[1]
+
+	correct, user, err := h.ValidateCredentials(username, password)
+	if err != nil {
+		c.SendStatus(500)
+	}
+	if !correct {
+		return c.SendString("Wrong Authorization")
+	}
+
+	return h.Upload(c, username, user.Blind, user.Restricted, user.Onetime, func(filename, short string, blind bool) error {
+		if blind {
+			return c.SendString("Uploaded " + filename)
+		}
+		return c.SendString("Uploaded " + filename + "\n" + h.Url + short)
+	})
+}
+
+func (h handler) HandleRemoveFile(c *fiber.Ctx) error {
 	short := c.Query("short", "")
 	file, err := h.DB.Files.GetFileByShort(short)
 	if err == nil {
@@ -106,7 +166,7 @@ func (h handler) RemoveFile(c *fiber.Ctx) error {
 	})
 }
 
-func (h handler) MoveToBlind(c *fiber.Ctx) error {
+func (h handler) HandleMoveToBlind(c *fiber.Ctx) error {
 	short := c.Query("short", "")
 	file, err := h.DB.Files.GetFileByShort(short)
 	if err == nil {
@@ -125,7 +185,7 @@ func (h handler) MoveToBlind(c *fiber.Ctx) error {
 	})
 }
 
-func (h handler) Details(c *fiber.Ctx) error {
+func (h handler) HandleDetails(c *fiber.Ctx) error {
 	short := c.Query("short", "")
 	file, err := h.DB.Files.GetFileByShort(short)
 	var info os.FileInfo

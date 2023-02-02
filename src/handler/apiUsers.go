@@ -7,6 +7,19 @@ import (
 	"github.com/rrune/goupload/util"
 )
 
+func (h handler) ValidateCredentials(username string, password string) (bool, models.User, error) {
+	user, err := h.DB.Users.GetUserByUsername(username)
+	if util.Check(err) {
+		return false, models.User{}, err
+	}
+
+	correct := util.DoPasswordsMatch(user.Password, password)
+	if correct {
+		return true, user, err
+	}
+	return false, models.User{}, err
+}
+
 func (h handler) HandleLogin(c *fiber.Ctx) error {
 	CallbackPath := c.Query("path", "")
 	if CallbackPath == "" {
@@ -50,12 +63,12 @@ func (h handler) HandleLogin(c *fiber.Ctx) error {
 	}
 }
 
-func (h handler) Logout(c *fiber.Ctx) error {
+func (h handler) HandleLogout(c *fiber.Ctx) error {
 	c.ClearCookie("JWT")
 	return c.Redirect("/login")
 }
 
-func (h handler) AddUser(c *fiber.Ctx) error {
+func (h handler) HandleAddUser(c *fiber.Ctx) error {
 	formUser := new(models.UserFromForm)
 	if err := c.BodyParser(formUser); err != nil {
 		return err
@@ -81,7 +94,7 @@ func (h handler) AddUser(c *fiber.Ctx) error {
 	})
 }
 
-func (h handler) RemoveUser(c *fiber.Ctx) error {
+func (h handler) HandleRemoveUser(c *fiber.Ctx) error {
 	username := c.Query("username", "")
 	err := h.DB.Users.RemoveUserByUsername(username)
 	if util.Check(err) {
@@ -94,7 +107,7 @@ func (h handler) RemoveUser(c *fiber.Ctx) error {
 	})
 }
 
-func (h handler) ChangePassword(c *fiber.Ctx) error {
+func (h handler) HandleChangePassword(c *fiber.Ctx) error {
 	user := new(models.User)
 	if err := c.BodyParser(user); err != nil {
 		return err

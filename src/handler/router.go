@@ -39,10 +39,11 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 	app.Post("/login", handler.HandleLogin)
 	app.Get("/login", template.Login)
 
-	app.Get("/logout", handler.Logout)
+	app.Get("/logout", handler.HandleLogout)
 
 	app.Get("/", auth, template.Index)
-	app.Post("/upload", auth, handler.Upload)
+	app.Post("/upload", auth, handler.HandleUploadWeb)
+	app.Post("/upld", handler.HandleUploadSimple) // endpoint for simple upload, for example with curl
 
 	manage := app.Group("/manage", auth)
 	manage.Use(func(c *fiber.Ctx) error {
@@ -56,17 +57,17 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 	})
 	manage.Get("/", template.Manage)
 
-	manage.Get("/removeFile", handler.RemoveFile)
-	manage.Get("/moveToBlind", handler.MoveToBlind)
-	manage.Get("/details", handler.Details)
-	manage.Post("/filterUser", template.Filter)
+	manage.Get("/removeFile", handler.HandleRemoveFile)
+	manage.Get("/moveToBlind", handler.HandleMoveToBlind)
+	manage.Get("/details", handler.HandleDetails)
+	manage.Post("/filterUser", template.HandleFilter) // unique template, handled by template instead of handler. TODO: change that maybe
 
-	manage.Get("/removeUser", handler.RemoveUser)
-	manage.Post("/addUser", handler.AddUser)
-	manage.Post("/changePassword", handler.ChangePassword)
+	manage.Get("/removeUser", handler.HandleRemoveUser)
+	manage.Post("/addUser", handler.HandleAddUser)
+	manage.Post("/changePassword", handler.HandleChangePassword)
 
-	app.Get("/:short", handler.Download)
-	app.Get("/r/:short", auth, handler.DownloadRestricted)
+	app.Get("/:short", handler.HandleDownload)
+	app.Get("/r/:short", auth, handler.HandleDownloadRestricted)
 
 	app.Listen(":" + port)
 }
