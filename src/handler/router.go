@@ -43,7 +43,7 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 
 	app.Get("/", auth, template.Index)
 	app.Post("/upload", auth, handler.HandleUploadWeb)
-	app.Post("/upld", handler.HandleUploadSimple) // endpoint for simple upload, for example with curl
+	app.Post("/", handler.HandleUploadSimple) // endpoint for simple upload, for example with curl
 
 	manage := app.Group("/manage", auth)
 	manage.Use(func(c *fiber.Ctx) error {
