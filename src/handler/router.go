@@ -59,6 +59,7 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 
 	manage.Get("/removeFile", handler.HandleRemoveFile)
 	manage.Get("/moveToBlind", handler.HandleMoveToBlind)
+	manage.Get("/switchRestrict", handler.HandleSwitchRestrict)
 	manage.Get("/details", handler.HandleDetails)
 	manage.Post("/filterUser", template.HandleFilter) // unique template, handled by template instead of handler. TODO: change that maybe
 

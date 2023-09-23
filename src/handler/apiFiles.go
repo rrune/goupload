@@ -185,6 +185,19 @@ func (h handler) HandleMoveToBlind(c *fiber.Ctx) error {
 	})
 }
 
+func (h handler) HandleSwitchRestrict(c *fiber.Ctx) error {
+	short := c.Query("short", "")
+	err := h.DB.Files.SwitchRestrict(short)
+	if util.Check(err) {
+		return c.Render("response", fiber.Map{
+			"Text": "Could restrict/unrestrict " + short,
+		})
+	}
+	return c.Render("response", fiber.Map{
+		"Text": "Restricted/Unrestriced " + short,
+	})
+}
+
 func (h handler) HandleDetails(c *fiber.Ctx) error {
 	short := c.Query("short", "")
 	file, err := h.DB.Files.GetFileByShort(short)

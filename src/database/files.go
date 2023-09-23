@@ -36,6 +36,15 @@ func (d FilesDB) RemoveFileByShort(short string) (err error) {
 	return
 }
 
+func (d FilesDB) SwitchRestrict(short string) (err error) {
+	file, err := d.GetFileByShort(short)
+	if err != nil {
+		return
+	}
+	err = d.DB.Table("uploadedFiles").Where("short = ?", short).Update("restricted", !file.Restricted).Error
+	return
+}
+
 func (d FilesDB) getShort() string {
 	var random string
 	unique := false
