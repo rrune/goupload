@@ -22,8 +22,9 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 	}
 	engine := html.New("../data/templates", ".html")
 	app := fiber.New(fiber.Config{
-		Views:     engine,
-		BodyLimit: uploadLimit * 1024 * 1024,
+		Views:                   engine,
+		BodyLimit:               uploadLimit * 1024 * 1024,
+		EnableTrustedProxyCheck: true,
 	})
 
 	auth := jwtware.New(jwtware.Config{
