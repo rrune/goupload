@@ -22,5 +22,6 @@
 
 .box-content {
     max-height: 75vh;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
