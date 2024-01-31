@@ -86,11 +86,13 @@ func (h handler) HandleAddUser(c *fiber.Ctx) error {
 	err := h.DB.Users.CreateUser(&user)
 	if util.CheckWLogs(err) {
 		return c.Render("response", fiber.Map{
-			"Text": "Could not create " + user.Username,
+			"Text":        "Could not create " + user.Username,
+			"Destination": "/dashboard",
 		})
 	}
 	return c.Render("response", fiber.Map{
-		"Text": "Created " + user.Username,
+		"Text":        "Created " + user.Username,
+		"Destination": "/dashboard",
 	})
 }
 
@@ -99,7 +101,8 @@ func (h handler) HandleRemoveUser(c *fiber.Ctx) error {
 	err := h.DB.Users.RemoveUserByUsername(username)
 	if util.CheckWLogs(err) {
 		return c.Render("response", fiber.Map{
-			"Text": "Could not remove " + username,
+			"Text":        "Could not remove " + username,
+			"Destination": "/dashboard",
 		})
 	}
 	return c.Redirect("/dashboard")
@@ -117,7 +120,8 @@ func (h handler) HandleChangePassword(c *fiber.Ctx) error {
 		})
 	}
 	return c.Render("response", fiber.Map{
-		"Text": "Changed Password of " + user.Username,
+		"Text":        "Changed Password of " + user.Username,
+		"Destination": "/dashboard",
 	})
 }
 
@@ -138,10 +142,12 @@ func (h handler) HandleChangePerms(c *fiber.Ctx) error {
 	err := h.DB.Users.ChangePerms(user)
 	if util.CheckWLogs(err) {
 		return c.Render("response", fiber.Map{
-			"Text": "Could not change permissions of " + user.Username,
+			"Text":        "Could not change permissions of " + user.Username,
+			"Destination": "/dashboard",
 		})
 	}
 	return c.Render("response", fiber.Map{
-		"Text": "Changed permissions of " + user.Username,
+		"Text":        "Changed permissions of " + user.Username,
+		"Destination": "/dashboard",
 	})
 }

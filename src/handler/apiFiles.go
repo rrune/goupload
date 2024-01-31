@@ -26,7 +26,8 @@ func (h handler) HandleDownload(c *fiber.Ctx) error {
 		return c.Download("../data/uploads/" + file.File)
 	}
 	return c.Render("response", fiber.Map{
-		"Text": "Short does not exist",
+		"Text":        "Short does not exist",
+		"Destination": "/",
 	})
 }
 
@@ -36,7 +37,8 @@ func (h handler) HandleDownloadRestricted(c *fiber.Ctx) error {
 		return c.Download("../data/uploads/" + file.File)
 	}
 	return c.Render("response", fiber.Map{
-		"Text": "Short does not exist",
+		"Text":        "Short does not exist",
+		"Destination": "/",
 	})
 }
 
@@ -98,12 +100,14 @@ func (h handler) HandleUploadWeb(c *fiber.Ctx) error {
 	return h.Upload(c, username, blind, restricted, onetime, func(filename, short string, blind bool) error {
 		if blind {
 			return c.Render("response", fiber.Map{
-				"Text": "Uploaded " + filename,
+				"Text":        "Uploaded " + filename,
+				"Destination": "/dashboard",
 			})
 		}
 		return c.Render("response", fiber.Map{
-			"Text": "Uploaded " + filename,
-			"Link": h.Url + short,
+			"Text":        "Uploaded " + filename,
+			"Link":        h.Url + short,
+			"Destination": "/",
 		})
 	})
 }
@@ -162,7 +166,8 @@ func (h handler) HandleRemoveFile(c *fiber.Ctx) error {
 	}
 	util.CheckWLogs(err)
 	return c.Render("response", fiber.Map{
-		"Text": "Could not remove " + short,
+		"Text":        "Could not remove " + short,
+		"Destination": "/dashboard",
 	})
 }
 
@@ -177,7 +182,8 @@ func (h handler) HandleMoveToBlind(c *fiber.Ctx) error {
 	}
 	if util.CheckWLogs(err) {
 		return c.Render("response", fiber.Map{
-			"Text": "Could not move " + short,
+			"Text":        "Could not move " + short,
+			"Destination": "/dashboard",
 		})
 	}
 	return c.Redirect("/dashboard")
@@ -192,7 +198,8 @@ func (h handler) HandleSwitchRestrict(c *fiber.Ctx) error {
 		})
 	}
 	return c.Render("response", fiber.Map{
-		"Text": "Restricted/Unrestriced " + short,
+		"Text":        "Restricted/Unrestriced " + short,
+		"Destination": "/dashboard",
 	})
 }
 
@@ -205,7 +212,8 @@ func (h handler) HandleDetails(c *fiber.Ctx) error {
 	}
 	if util.CheckWLogs(err) {
 		return c.Render("response", fiber.Map{
-			"Text": "Could not get details of " + short,
+			"Text":        "Could not get details of " + short,
+			"Destination": "/dashboard",
 		})
 	}
 	infostrings := []string{
@@ -215,6 +223,7 @@ func (h handler) HandleDetails(c *fiber.Ctx) error {
 		file.Ip,
 	}
 	return c.Render("response", fiber.Map{
-		"Strings": infostrings,
+		"Strings":     infostrings,
+		"Destination": "/dashboard",
 	})
 }
