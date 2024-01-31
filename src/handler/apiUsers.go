@@ -46,7 +46,7 @@ func (h handler) HandleLogin(c *fiber.Ctx) error {
 		}
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 		t, err := token.SignedString([]byte(h.JwtKey))
-		if util.Check(err) {
+		if util.CheckWLogs(err) {
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
 		cookie := fiber.Cookie{
@@ -84,7 +84,7 @@ func (h handler) HandleAddUser(c *fiber.Ctx) error {
 	}
 
 	err := h.DB.Users.CreateUser(&user)
-	if util.Check(err) {
+	if util.CheckWLogs(err) {
 		return c.Render("response", fiber.Map{
 			"Text": "Could not create " + user.Username,
 		})
@@ -97,7 +97,7 @@ func (h handler) HandleAddUser(c *fiber.Ctx) error {
 func (h handler) HandleRemoveUser(c *fiber.Ctx) error {
 	username := c.Query("username", "")
 	err := h.DB.Users.RemoveUserByUsername(username)
-	if util.Check(err) {
+	if util.CheckWLogs(err) {
 		return c.Render("response", fiber.Map{
 			"Text": "Could not remove " + username,
 		})
@@ -113,7 +113,7 @@ func (h handler) HandleChangePassword(c *fiber.Ctx) error {
 		return err
 	}
 	err := h.DB.Users.ChangePassword(user.Username, user.Password)
-	if util.Check(err) {
+	if util.CheckWLogs(err) {
 		return c.Render("response", fiber.Map{
 			"Text": "Could not change password of " + user.Username,
 		})

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/base64"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -17,6 +16,9 @@ import (
 func (h handler) HandleDownload(c *fiber.Ctx) error {
 	file, err := h.DB.Files.GetFileByShort(c.Params("short"))
 	if err == nil {
+		err = h.DB.Files.UpdateDownloadCounter(c.Params("short"), file.Downloads)
+		// check error, if error occours still send file if everything else works
+		util.CheckWLogs(err)
 		if file.Restricted {
 			return c.Redirect("/r/" + c.Params("short"))
 		}
@@ -50,7 +52,7 @@ func (h handler) Upload(c *fiber.Ctx, username string, blindPerms bool, restrict
 	}
 
 	file, err := c.FormFile("file")
-	if err != nil {
+	if util.CheckWLogs(err) {
 		return c.SendString("No file given")
 	}
 
@@ -58,7 +60,6 @@ func (h handler) Upload(c *fiber.Ctx, username string, blindPerms bool, restrict
 	switch blind {
 	case true:
 		err = c.SaveFile(file, "../data/blind/"+file.Filename)
-		fmt.Println(err)
 
 	case false:
 		short, err = h.DB.Files.AddNewFile(models.File{
@@ -73,7 +74,7 @@ func (h handler) Upload(c *fiber.Ctx, username string, blindPerms bool, restrict
 		}
 
 	}
-	if err != nil {
+	if util.CheckWLogs(err) {
 		return c.SendStatus(500)
 	}
 
@@ -118,7 +119,7 @@ func (h handler) HandleUploadSimple(c *fiber.Ctx) error {
 	}
 	// [0] of slice is "Basic"
 	authByte, err := base64.StdEncoding.DecodeString(authBase64[1])
-	if err != nil {
+	if util.CheckWLogs(err) {
 		return c.SendStatus(500)
 	}
 	//basic auth is formated username:password
@@ -130,7 +131,7 @@ func (h handler) HandleUploadSimple(c *fiber.Ctx) error {
 	password := auth[1]
 
 	correct, user, err := h.ValidateCredentials(username, password)
-	if err != nil {
+	if util.CheckWLogs(err) {
 		c.SendStatus(500)
 	}
 	if !correct {
@@ -161,6 +162,7 @@ func (h handler) HandleRemoveFile(c *fiber.Ctx) error {
 			}
 		}
 	}
+	util.CheckWLogs(err)
 	return c.Render("response", fiber.Map{
 		"Text": "Could not remove " + short,
 	})
@@ -175,7 +177,7 @@ func (h handler) HandleMoveToBlind(c *fiber.Ctx) error {
 			err = os.Rename("../data/uploads/"+file.File, "../data/blind/"+file.File)
 		}
 	}
-	if util.Check(err) {
+	if util.CheckWLogs(err) {
 		return c.Render("response", fiber.Map{
 			"Text": "Could not move " + short,
 		})
@@ -188,7 +190,7 @@ func (h handler) HandleMoveToBlind(c *fiber.Ctx) error {
 func (h handler) HandleSwitchRestrict(c *fiber.Ctx) error {
 	short := c.Query("short", "")
 	err := h.DB.Files.SwitchRestrict(short)
-	if util.Check(err) {
+	if util.CheckWLogs(err) {
 		return c.Render("response", fiber.Map{
 			"Text": "Could restrict/unrestrict " + short,
 		})
@@ -205,12 +207,12 @@ func (h handler) HandleDetails(c *fiber.Ctx) error {
 	if err == nil {
 		info, err = os.Stat("../data/uploads/" + file.File)
 	}
-	if util.Check(err) {
+	if util.CheckWLogs(err) {
 		return c.Render("response", fiber.Map{
 			"Text": "Could not get details of " + short,
 		})
 	}
-	infostr := info.Name() + " " + strconv.FormatInt(info.Size(), 10) + " bytes"
+	infostr := info.Name() + "\n" + strconv.FormatInt(info.Size(), 10) + " bytes \n" + strconv.Itoa(file.Downloads) + " Downloads"
 	return c.Render("response", fiber.Map{
 		"Text": infostr,
 	})

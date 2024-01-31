@@ -31,12 +31,12 @@
           </div>
           <div class="right buttons">
             <div>
-              <a href="{{$.Url}}manage/details?short={{.Short}}"><span class="material-icons-outlined">info</span></a>
-              <a href="{{$.Url}}manage/switchRestrict?short={{.Short}}"><span class="material-icons-outlined">key</span></a>
+              <a href="{{$.Url}}dashboard/details?short={{.Short}}"><span class="material-icons-outlined">info</span></a>
+              <a href="{{$.Url}}dashboard/switchRestrict?short={{.Short}}"><span class="material-icons-outlined">key</span></a>
             </div>
             <div>
-              <a href="{{$.Url}}manage/moveToBlind?short={{.Short}}"><span class="material-icons-outlined">visibility_off</span></a>
-              <a href="{{$.Url}}manage/removeFile?short={{.Short}}"><span class="material-icons-outlined">delete</span></a>
+              <a href="{{$.Url}}dashboard/moveToBlind?short={{.Short}}"><span class="material-icons-outlined">visibility_off</span></a>
+              <a href="{{$.Url}}dashboard/removeFile?short={{.Short}}"><span class="material-icons-outlined">delete</span></a>
             </div>
           </div>
         </div>
@@ -58,7 +58,7 @@
             </div>
           </div>
           <div class="buttons">
-            <a href="{{$.Url}}manage/removeUser?username={{.Username}}"><span class="material-icons-outlined">delete</span></a>
+            <a href="{{$.Url}}dashboard/removeUser?username={{.Username}}"><span class="material-icons-outlined">delete</span></a>
           </div>
         </div>
     {{end}}
@@ -72,7 +72,7 @@
         <b>Restricted</b>: Can upload files that need login to download<br>
         <b>Onetime</b>: User will be removed after uploading a file<br>
         <br>
-        <form class="addUser" action="/manage/addUser" method="post">
+        <form class="addUser" action="/dashboard/addUser" method="post">
           <input type="text" name="username" placeholder="Username" required>
           <input type="text" name="password" placeholder="Password" required>
           <div>

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/rrune/goupload/models"
+	"github.com/rrune/goupload/util"
 	"gorm.io/gorm"
 )
 
@@ -38,7 +39,7 @@ func (d FilesDB) RemoveFileByShort(short string) (err error) {
 
 func (d FilesDB) SwitchRestrict(short string) (err error) {
 	file, err := d.GetFileByShort(short)
-	if err != nil {
+	if util.Check(err) {
 		return
 	}
 	err = d.DB.Table("uploadedFiles").Where("short = ?", short).Update("restricted", !file.Restricted).Error
@@ -51,11 +52,16 @@ func (d FilesDB) getShort() string {
 	for !unique {
 		random = d.random(d.ShortLength)
 		_, err := d.GetFileByShort(random)
-		if err != nil {
+		if util.Check(err) {
 			unique = true
 		}
 	}
 	return random
+}
+
+func (d FilesDB) UpdateDownloadCounter(short string, downloads int) (err error) {
+	err = d.DB.Table("uploadedFiles").Where("short = ?", short).Update("downloads", downloads+1).Error
+	return
 }
 
 func (d FilesDB) random(n int) string {

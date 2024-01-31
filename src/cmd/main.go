@@ -19,7 +19,6 @@ func main() {
 	defer f.Close()
 	log.SetOutput(f)
 	log.SetFlags(2 | 3)
-	log.Println("")
 
 	var config models.Config
 	ymlData, err := os.ReadFile("../data/config.yml")

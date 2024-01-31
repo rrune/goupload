@@ -30,8 +30,8 @@ func (d UserDB) CreateUser(user *models.User) (err error) {
 	user.Password = hashedPassword
 
 	_, err2 := d.GetUserByUsername(user.Username)
-	if err2 == nil {
-		err = errors.New("Username already exists")
+	if !util.Check(err2) {
+		err = errors.New("username already exists")
 		return
 	}
 
@@ -45,7 +45,7 @@ func (d UserDB) RemoveUserByUsername(username string) (err error) {
 		return
 	}
 	if len(allUsers) == 1 {
-		err = errors.New("Cannot remove only user")
+		err = errors.New("cannot remove only user")
 		return
 	}
 

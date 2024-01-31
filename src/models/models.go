@@ -39,6 +39,7 @@ type File struct {
 	Short      string    `db:"short"`
 	Ip         string    `db:"ip"`
 	Restricted bool      `db:"restricted"`
+	Downloads  int       `db:"downloads"`
 }
 
 type Login struct {
