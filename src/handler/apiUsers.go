@@ -90,10 +90,7 @@ func (h handler) HandleAddUser(c *fiber.Ctx) error {
 			"Destination": "/dashboard",
 		})
 	}
-	return c.Render("response", fiber.Map{
-		"Text":        "Created " + user.Username,
-		"Destination": "/dashboard",
-	})
+	return c.Redirect("/dashboard")
 }
 
 func (h handler) HandleRemoveUser(c *fiber.Ctx) error {
