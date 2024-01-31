@@ -140,10 +140,10 @@ func (h handler) HandleChangePerms(c *fiber.Ctx) error {
 	err := h.DB.Users.ChangePerms(user)
 	if util.CheckWLogs(err) {
 		return c.Render("response", fiber.Map{
-			"Text": "Could not change perms of " + user.Username,
+			"Text": "Could not change permissions of " + user.Username,
 		})
 	}
 	return c.Render("response", fiber.Map{
-		"Text": "Changed Password of " + user.Username,
+		"Text": "Changed permissions of " + user.Username,
 	})
 }
