@@ -212,8 +212,12 @@ func (h handler) HandleDetails(c *fiber.Ctx) error {
 			"Text": "Could not get details of " + short,
 		})
 	}
-	infostr := info.Name() + "<br>" + strconv.FormatInt(info.Size(), 10) + " bytes <br>" + strconv.Itoa(file.Downloads) + " Downloads"
-	return c.Render("response", fiber.Map{
-		"Text": infostr,
+	infostrings := []string{
+		info.Name(),
+		strconv.FormatInt(info.Size(), 10) + " bytes",
+		strconv.Itoa(file.Downloads) + " Downloads",
+	}
+	return c.Render("details", fiber.Map{
+		"Strings": infostrings,
 	})
 }
