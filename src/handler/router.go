@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
 	"github.com/gofiber/template/html"
@@ -21,6 +23,12 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 		Url: url,
 	}
 	engine := html.New("../data/templates", ".html")
+	engine.AddFunc(
+		"formatDate", func(timestamp time.Time) string {
+			loc, _ := time.LoadLocation("Europe/Berlin")
+			return timestamp.In(loc).Format("02.01.2006 15:04:05")
+		},
+	)
 	app := fiber.New(fiber.Config{
 		Views:                   engine,
 		BodyLimit:               uploadLimit * 1024 * 1024,
