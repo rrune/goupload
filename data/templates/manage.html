@@ -16,18 +16,9 @@
     <div class="box">
       <h3>FILES</h3>
       <div class="box-content">
-        <form action="/manage/filterUser" method="post">
-          Filter per user: <br>
-          <select name="username" required>
-            {{range .Users}}
-                <option value="{{.Username}}">{{.Username}}</option>
-            {{end}}
-          </select>
-          <input type="submit" name="submit" value="Filter">
-        </form>
         {{range .Files}}
         <div class='entry'>
-          <span class="filename">{{.File}}</span>
+          <span class="title">{{.File}}</span>
           <div class="info">
             <span>{{.Author}}</span>
             <span>{{formatDate .Timestamp}}</span>
@@ -50,15 +41,19 @@
       <h3>USERS</h3>
       <div class="box-content">
         {{range .Users}}
-            <div class='entry'>
-                <b>Username</b>: {{.Username}}<br>
-                <b>Root</b>: {{.Root}}<br>
-                <b>Blind</b>: {{.Blind}}<br>
-                <b>Restricted</b>: {{.Restricted}}<br>
-                <b>Onetime</b>: {{.Onetime}}<br>
-                <a href='{{$.Url}}manage/removeUser?username={{.Username}}'>Remove User</a>
+        <div class='entry'>
+            <span class="title">{{.Username}}</span>
+            <div class="info">
+              {{if .Root}}<span>Root</span>{{end}}
+              {{if .Blinmd}}<span>Blind</span>{{end}}
+              {{if .Restricted}}<span>Restricted</span>{{end}}
+              {{if .Onetime}}<span>Onetime</span>{{end}}
             </div>
-        {{end}}
+            <div class="buttons">
+              <a href="{{$.Url}}manage/removeUser?username={{.Username}}"><span class="material-icons-outlined">delete</span></a>
+            </div>
+        </div>
+    {{end}}
       </div>
     </div>
     <div class="box">
