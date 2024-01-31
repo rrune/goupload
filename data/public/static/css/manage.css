@@ -25,3 +25,44 @@
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+.entry .filename {
+    display: inline-block;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.entry .info {
+    size: 100%;
+    font-size: 0.9em;
+}
+
+.entry .info span {
+    margin-right: 0.8em;
+}
+
+.entry .buttons {
+    display: block;
+    margin-top: 0.3em;
+}
+
+.entry .buttons a {
+    display: inline-block;
+    text-align: center;
+    height: 1.5em;
+    width: 1.5em;
+    border: 2px solid var(--font);
+    border-radius: 0.5em;
+    padding: 0.2em;
+
+    color: var(--font)
+}
+
+.entry .buttons a:hover {
+    color: var(--font-hover);
+    border-color: var(--font-hover);
+}
+
+.md-em {
+    font-size: 1em !important;
+}
