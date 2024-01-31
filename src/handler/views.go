@@ -27,7 +27,7 @@ func (t template) Index(c *fiber.Ctx) error {
 	})
 }
 
-func (t template) Manage(c *fiber.Ctx) error {
+func (t template) Dashboard(c *fiber.Ctx) error {
 	users, err := t.DB.Users.GetAllUsers()
 	if util.Check(err) {
 		return c.SendStatus(fiber.StatusInternalServerError)
@@ -38,7 +38,7 @@ func (t template) Manage(c *fiber.Ctx) error {
 	}
 	// reverse the slice to show newest first
 	slices.Reverse[[]models.File](files)
-	return c.Render("manage", fiber.Map{
+	return c.Render("dashboard", fiber.Map{
 		"Users": users,
 		"Files": files,
 		"Url":   t.Url,

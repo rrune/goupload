@@ -3,9 +3,9 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Manage</title>
+  <title>Dashboard</title>
   <link rel="stylesheet" href="/static/css/master.css">
-  <link rel="stylesheet" href="/static/css/manage.css">
+  <link rel="stylesheet" href="/static/css/dashboard.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="/static/assets/favicon.ico">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"rel="stylesheet">
@@ -18,20 +18,26 @@
       <div class="box-content">
         {{range .Files}}
         <div class='entry'>
-          <span class="title">{{.File}}</span>
-          <div class="info">
-            <span>{{.Author}}</span>
-            <span>{{formatDate .Timestamp}}</span>
-            {{if .Restricted}}
-            <span class="material-icons-outlined md-em">block</span>
-            {{end}}
+          <div class="left">
+            <span class="title">{{.File}}</span>
+            <div class="info">
+              <span>{{.Author}}</span>
+              <span>{{formatDate .Timestamp}}</span>
+              {{if .Restricted}}
+              <span class="material-icons-outlined md-em">block</span>
+              {{end}}
+            </div>
+            <a class="link" href="{{$.Url}}{{.Short}}">{{$.Url}}{{.Short}}</a>
           </div>
-          <a href="{{$.Url}}{{.Short}}">{{$.Url}}{{.Short}}</a>
-          <div class="buttons">
-            <a href="{{$.Url}}manage/details?short={{.Short}}"><span class="material-icons-outlined">info</span></a>
-            <a href="{{$.Url}}manage/moveToBlind?short={{.Short}}"><span class="material-icons-outlined">visibility_off</span></a>
-            <a href="{{$.Url}}manage/removeFile?short={{.Short}}"><span class="material-icons-outlined">delete</span></a>
-            <a href="{{$.Url}}manage/switchRestrict?short={{.Short}}"><span class="material-icons-outlined">key</span></a>
+          <div class="right buttons">
+            <div>
+              <a href="{{$.Url}}manage/details?short={{.Short}}"><span class="material-icons-outlined">info</span></a>
+              <a href="{{$.Url}}manage/switchRestrict?short={{.Short}}"><span class="material-icons-outlined">key</span></a>
+            </div>
+            <div>
+              <a href="{{$.Url}}manage/moveToBlind?short={{.Short}}"><span class="material-icons-outlined">visibility_off</span></a>
+              <a href="{{$.Url}}manage/removeFile?short={{.Short}}"><span class="material-icons-outlined">delete</span></a>
+            </div>
           </div>
         </div>
         {{end}}
@@ -42,6 +48,7 @@
       <div class="box-content">
         {{range .Users}}
         <div class='entry'>
+          <div class="left">
             <span class="title">{{.Username}}</span>
             <div class="info">
               {{if .Root}}<span>Root</span>{{end}}
@@ -49,9 +56,10 @@
               {{if .Restricted}}<span>Restricted</span>{{end}}
               {{if .Onetime}}<span>Onetime</span>{{end}}
             </div>
-            <div class="buttons">
-              <a href="{{$.Url}}manage/removeUser?username={{.Username}}"><span class="material-icons-outlined">delete</span></a>
-            </div>
+          </div>
+          <div class="buttons">
+            <a href="{{$.Url}}manage/removeUser?username={{.Username}}"><span class="material-icons-outlined">delete</span></a>
+          </div>
         </div>
     {{end}}
       </div>

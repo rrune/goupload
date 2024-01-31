@@ -54,8 +54,8 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 	app.Post("/upload", auth, handler.HandleUploadWeb)
 	app.Post("/", handler.HandleUploadSimple) // endpoint for simple upload, for example with curl
 
-	manage := app.Group("/manage", auth)
-	manage.Use(func(c *fiber.Ctx) error {
+	dashboard := app.Group("/dashboard", auth)
+	dashboard.Use(func(c *fiber.Ctx) error {
 		user := c.Locals("user").(*jwt.Token)
 		claims := user.Claims.(jwt.MapClaims)
 
@@ -64,16 +64,16 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 		}
 		return c.Next()
 	})
-	manage.Get("/", template.Manage)
+	dashboard.Get("/", template.Dashboard)
 
-	manage.Get("/removeFile", handler.HandleRemoveFile)
-	manage.Get("/moveToBlind", handler.HandleMoveToBlind)
-	manage.Get("/switchRestrict", handler.HandleSwitchRestrict)
-	manage.Get("/details", handler.HandleDetails)
+	dashboard.Get("/removeFile", handler.HandleRemoveFile)
+	dashboard.Get("/moveToBlind", handler.HandleMoveToBlind)
+	dashboard.Get("/switchRestrict", handler.HandleSwitchRestrict)
+	dashboard.Get("/details", handler.HandleDetails)
 
-	manage.Get("/removeUser", handler.HandleRemoveUser)
-	manage.Post("/addUser", handler.HandleAddUser)
-	manage.Post("/changePassword", handler.HandleChangePassword)
+	dashboard.Get("/removeUser", handler.HandleRemoveUser)
+	dashboard.Post("/addUser", handler.HandleAddUser)
+	dashboard.Post("/changePassword", handler.HandleChangePassword)
 
 	app.Get("/:short", handler.HandleDownload)
 	app.Get("/r/:short", auth, handler.HandleDownloadRestricted)

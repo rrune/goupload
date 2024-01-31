@@ -26,6 +26,28 @@
     overflow-y: auto;
 }
 
+.entry {
+    display: flex;
+    justify-content: space-between;
+
+    overflow-x: scroll;
+}
+
+.entry .left {
+    flex-basis: 70%;
+}
+
+.entry .left .link {
+    display: inline-block;
+    margin: 0.35em auto auto;
+    font-weight: bold;
+}
+
+.entry .right {
+    flex-basis: 30%;
+    text-align:  right;
+}
+
 .entry .title {
     display: inline-block;
     font-size: 1.1em;
@@ -42,8 +64,9 @@
 }
 
 .entry .buttons {
-    display: block;
-    margin-top: 0.3em;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
 }
 
 .entry .buttons a {
@@ -53,6 +76,7 @@
     width: 1.5em;
     border: 2px solid var(--font);
     border-radius: 0.5em;
+    margin: 0.15em auto;
     padding: 0.2em;
 
     color: var(--font)
@@ -66,3 +90,26 @@
 .md-em {
     font-size: 1em !important;
 }
+
+/* move the buttons down when screen gets smaller */
+@media (max-width: 1550px) {
+    .entry {
+        display: block;
+    }
+
+    .entry .right {
+        text-align:  left;
+    }
+
+    .entry .left .link {
+        margin: auto;
+    }
+
+    .entry .buttons {
+        display: block;
+    }
+
+    .entry .buttons div {
+        display: inline-block;
+    }
+  }
