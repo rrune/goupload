@@ -92,7 +92,7 @@
       </div>
       <h3>CHANGE PASSWORD</h3>
       <div class="box-content">
-        <form class="centerForm" action="changePassword" method="post">
+        <form class="centerForm" action="/dashboard/changePassword" method="post">
           <select name="username" required>
             {{range .Users}}
                 <option value="{{.Username}}">{{.Username}}</option>
@@ -107,7 +107,7 @@
       </div>
       <h3>CHANGE PERMISSIONS</h3>
       <div class="box-content">
-        <form class="centerForm" action="changePerms" method="post">
+        <form class="centerForm" action="/dashboard/changePerms" method="post">
           <select name="username" required>
             {{range .Users}}
                 <option value="{{.Username}}">{{.Username}}</option>
