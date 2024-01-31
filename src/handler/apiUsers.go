@@ -122,3 +122,28 @@ func (h handler) HandleChangePassword(c *fiber.Ctx) error {
 		"Text": "Changed Password of " + user.Username,
 	})
 }
+
+func (h handler) HandleChangePerms(c *fiber.Ctx) error {
+	formUser := new(models.UserFromForm)
+	if err := c.BodyParser(formUser); err != nil {
+		return err
+	}
+
+	user := models.User{
+		Username:   formUser.Username,
+		Password:   "",
+		Root:       formUser.Root == "root",
+		Blind:      formUser.Blind == "blind",
+		Onetime:    formUser.Onetime == "onetime",
+		Restricted: formUser.Restricted == "restricted",
+	}
+	err := h.DB.Users.ChangePerms(user)
+	if util.CheckWLogs(err) {
+		return c.Render("response", fiber.Map{
+			"Text": "Could not change perms of " + user.Username,
+		})
+	}
+	return c.Render("response", fiber.Map{
+		"Text": "Changed Password of " + user.Username,
+	})
+}

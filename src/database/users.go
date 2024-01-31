@@ -61,3 +61,8 @@ func (d UserDB) ChangePassword(username string, password string) (err error) {
 	err = d.DB.Table("uploaderUsers").Where("username = ?", username).Update("password", hashedPassword).Error
 	return
 }
+
+func (d UserDB) ChangePerms(user models.User) (err error) {
+	err = d.DB.Table("uploaderUsers").Where("username = ?", user.Username).Update("root", user.Root).Update("blind", user.Blind).Update("restricted", user.Restricted).Update("onetime", user.Onetime).Error
+	return
+}

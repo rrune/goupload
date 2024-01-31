@@ -74,6 +74,7 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 	dashboard.Get("/removeUser", handler.HandleRemoveUser)
 	dashboard.Post("/addUser", handler.HandleAddUser)
 	dashboard.Post("/changePassword", handler.HandleChangePassword)
+	dashboard.Post("/changePerms", handler.HandleChangePerms)
 
 	app.Get("/:short", handler.HandleDownload)
 	app.Get("/r/:short", auth, handler.HandleDownloadRestricted)
