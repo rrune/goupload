@@ -156,9 +156,7 @@ func (h handler) HandleRemoveFile(c *fiber.Ctx) error {
 
 			err = h.DB.Files.RemoveFileByShort(short)
 			if err == nil {
-				return c.Render("response", fiber.Map{
-					"Text": "Removed " + short,
-				})
+				return c.Redirect("/dashboard")
 			}
 		}
 	}
@@ -182,9 +180,7 @@ func (h handler) HandleMoveToBlind(c *fiber.Ctx) error {
 			"Text": "Could not move " + short,
 		})
 	}
-	return c.Render("response", fiber.Map{
-		"Text": "Moved " + short + "to blind",
-	})
+	return c.Redirect("/dashboard")
 }
 
 func (h handler) HandleSwitchRestrict(c *fiber.Ctx) error {
@@ -216,8 +212,9 @@ func (h handler) HandleDetails(c *fiber.Ctx) error {
 		info.Name(),
 		strconv.FormatFloat(float64(info.Size())/1000, 'f', -1, 64) + " kb",
 		strconv.Itoa(file.Downloads) + " Downloads",
+		file.Ip,
 	}
-	return c.Render("details", fiber.Map{
+	return c.Render("response", fiber.Map{
 		"Strings": infostrings,
 	})
 }

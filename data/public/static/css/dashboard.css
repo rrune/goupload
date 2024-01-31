@@ -91,6 +91,18 @@
     font-size: 1em !important;
 }
 
+.summaryHeader {
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    font-size: 1em;
+    margin: 1.5em auto;
+    user-select: none;
+    -ms-user-select: None;
+    -moz-user-select: None;
+    -webkit-user-select: None;
+}
+
 /* move the buttons down when screen gets smaller */
 @media (max-width: 1550px) {
     .entry {

@@ -24,7 +24,7 @@
               <span>{{.Author}}</span>
               <span>{{formatDate .Timestamp}}</span>
               {{if .Restricted}}
-              <span class="material-icons-outlined md-em">block</span>
+              <span class="material-icons-outlined md-em">lock</span>
               {{end}}
             </div>
             <a class="link" href="{{$.Url}}{{.Short}}">{{$.Url}}{{.Short}}</a>
@@ -43,6 +43,7 @@
         {{end}}
       </div>
     </div>
+
     <div class="box">
       <h3>USERS</h3>
       <div class="box-content">
@@ -64,71 +65,83 @@
     {{end}}
       </div>
     </div>
+
     <div class="box">
-      <h3>CREATE USER</h3>
-      <div class="box-content">
-        <b>Root</b>: Can see and use this page<br>
-        <b>Blind</b>: Can upload files blind, different directory and not in database<br>
-        <b>Restricted</b>: Can upload files that need login to download<br>
-        <b>Onetime</b>: User will be removed after uploading a file<br>
-        <br>
-        <form class="centerForm" action="/dashboard/addUser" method="post">
-          <input type="text" name="username" placeholder="Username" required>
-          <input type="text" name="password" placeholder="Password" required>
-          <div>
-            <input type="checkbox" name="root" value="root" id="root">
-            <label for="root">Root</label>
-            <input type="checkbox" name="blind" value="blind" id="blind">
-            <label for="blind">Blind</label>
-          </div>
-          <div>
-            <input type="checkbox" name="restricted" value="restricted" id="restricted">
-            <label for="restricted">Restricted</label>
-            <input type="checkbox" name="onetime" value="onetime" id="onetime">
-            <label for="onetime">Onetime</label>
-          </div>
-          <input type="submit" name="submit" value="Create">
-        </form>
-      </div>
-      <h3>CHANGE PASSWORD</h3>
-      <div class="box-content">
-        <form class="centerForm" action="/dashboard/changePassword" method="post">
-          <select name="username" required>
-            {{range .Users}}
-                <option value="{{.Username}}">{{.Username}}</option>
-            {{end}}
-          </select>
+      <h3>MANAGE USERS</h3>
+
+      <details>
+        <summary class="summaryHeader"><span>CREATE USER</span></summary>
+        <div class="box-content">
+          <b>Root</b>: Can see and use this page<br>
+          <b>Blind</b>: Can upload files blind, different directory and not in database<br>
+          <b>Restricted</b>: Can upload files that need login to download<br>
+          <b>Onetime</b>: User will be removed after uploading a file<br>
           <br>
-          <div>
-            <input type="text" name="password" placeholder="New Password">
+          <form class="centerForm" action="/dashboard/addUser" method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="text" name="password" placeholder="Password" required>
+            <div>
+              <input type="checkbox" name="root" value="root" id="root">
+              <label for="root">Root</label>
+              <input type="checkbox" name="blind" value="blind" id="blind">
+              <label for="blind">Blind</label>
+            </div>
+            <div>
+              <input type="checkbox" name="restricted" value="restricted" id="restricted">
+              <label for="restricted">Restricted</label>
+              <input type="checkbox" name="onetime" value="onetime" id="onetime">
+              <label for="onetime">Onetime</label>
+            </div>
+            <input type="submit" name="submit" value="Create">
+          </form>
+        </div>
+      </details>
+
+      <details>
+        <summary class="summaryHeader"><span>CHANGE PASSWORD</span></summary>
+        <div class="box-content">
+          <form class="centerForm" action="/dashboard/changePassword" method="post">
+            <select name="username" required>
+              {{range .Users}}
+                  <option value="{{.Username}}">{{.Username}}</option>
+              {{end}}
+            </select>
+            <br>
+            <div>
+              <input type="text" name="password" placeholder="New Password">
+              <input type="submit" name="submit" value="Change">
+            </div>
+          </form>
+        </div>
+      </details>
+
+      <details>
+        <summary class="summaryHeader"><span>CHANGE PERMISSIONS</span></summary>
+        <div class="box-content">
+          <form class="centerForm" action="/dashboard/changePerms" method="post">
+            <select name="username" required>
+              {{range .Users}}
+                  <option value="{{.Username}}">{{.Username}}</option>
+              {{end}}
+            </select>
+            <br>
+            <div>
+              <input type="checkbox" name="root" value="root" id="root">
+              <label for="root">Root</label>
+              <input type="checkbox" name="blind" value="blind" id="blind">
+              <label for="blind">Blind</label>
+            </div>
+            <div>
+              <input type="checkbox" name="restricted" value="restricted" id="restricted">
+              <label for="restricted">Restricted</label>
+              <input type="checkbox" name="onetime" value="onetime" id="onetime">
+              <label for="onetime">Onetime</label>
+            </div>
             <input type="submit" name="submit" value="Change">
-          </div>
-        </form>
-      </div>
-      <h3>CHANGE PERMISSIONS</h3>
-      <div class="box-content">
-        <form class="centerForm" action="/dashboard/changePerms" method="post">
-          <select name="username" required>
-            {{range .Users}}
-                <option value="{{.Username}}">{{.Username}}</option>
-            {{end}}
-          </select>
-          <br>
-          <div>
-            <input type="checkbox" name="root" value="root" id="root">
-            <label for="root">Root</label>
-            <input type="checkbox" name="blind" value="blind" id="blind">
-            <label for="blind">Blind</label>
-          </div>
-          <div>
-            <input type="checkbox" name="restricted" value="restricted" id="restricted">
-            <label for="restricted">Restricted</label>
-            <input type="checkbox" name="onetime" value="onetime" id="onetime">
-            <label for="onetime">Onetime</label>
-          </div>
-          <input type="submit" name="submit" value="Change">
-        </form>
-      </div>
+          </form>
+        </div>
+      </details>
+
     </div>
   </div>
 

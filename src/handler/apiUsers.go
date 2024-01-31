@@ -102,9 +102,7 @@ func (h handler) HandleRemoveUser(c *fiber.Ctx) error {
 			"Text": "Could not remove " + username,
 		})
 	}
-	return c.Render("response", fiber.Map{
-		"Text": "Removed " + username,
-	})
+	return c.Redirect("/dashboard")
 }
 
 func (h handler) HandleChangePassword(c *fiber.Ctx) error {
