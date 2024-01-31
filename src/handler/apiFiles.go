@@ -214,7 +214,7 @@ func (h handler) HandleDetails(c *fiber.Ctx) error {
 	}
 	infostrings := []string{
 		info.Name(),
-		strconv.FormatInt(info.Size(), 10) + " bytes",
+		strconv.FormatFloat(float64(info.Size())/1000, 'E', -1, 64) + " kb",
 		strconv.Itoa(file.Downloads) + " Downloads",
 	}
 	return c.Render("details", fiber.Map{
