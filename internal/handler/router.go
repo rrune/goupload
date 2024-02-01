@@ -59,7 +59,7 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 		user := c.Locals("user").(*jwt.Token)
 		claims := user.Claims.(jwt.MapClaims)
 
-		if claims["root"].(bool) != true {
+		if !claims["root"].(bool) {
 			c.SendStatus(fiber.StatusUnauthorized)
 		}
 		return c.Next()

@@ -24,6 +24,11 @@ func (d FilesDB) GetFileByShort(short string) (f models.File, err error) {
 	return
 }
 
+func (d FilesDB) GetFileByName(short string) (f models.File, err error) {
+	err = d.DB.Table("uploadedFiles").First(&f, "file = ?", short).Error
+	return
+}
+
 func (d FilesDB) AddNewFile(file models.File) (short string, err error) {
 	short = d.getShort()
 	file.Short = short

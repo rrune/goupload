@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/base64"
+	"errors"
 	"os"
 	"strconv"
 	"strings"
@@ -11,6 +12,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/rrune/goupload/internal/models"
 	"github.com/rrune/goupload/internal/util"
+	"gorm.io/gorm"
 )
 
 func (h handler) HandleDownload(c *fiber.Ctx) error {
@@ -61,9 +63,39 @@ func (h handler) Upload(c *fiber.Ctx, username string, blindPerms bool, restrict
 	var short string
 	switch blind {
 	case true:
+
+		// ensure filenames are unique
+		filenameUnique := false
+		for !filenameUnique {
+			_, err := os.Stat("./data/blind/" + file.Filename)
+
+			if errors.Is(err, os.ErrNotExist) {
+				filenameUnique = true
+			} else if util.CheckWLogs(err) {
+				return c.SendStatus(405)
+			} else {
+				file.Filename = "_" + file.Filename
+			}
+		}
+
 		err = c.SaveFile(file, "./data/blind/"+file.Filename)
 
 	case false:
+
+		// ensure filenames are unique
+		filenameUnique := false
+		for !filenameUnique {
+			_, err := h.DB.Files.GetFileByName(file.Filename)
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				filenameUnique = true
+			} else if util.CheckWLogs(err) {
+				return c.SendStatus(405)
+			} else {
+				// ad an underscore to the filename if it's a duplicate
+				file.Filename = "_" + file.Filename
+			}
+		}
+
 		short, err = h.DB.Files.AddNewFile(models.File{
 			File:       file.Filename,
 			Author:     username,
@@ -101,7 +133,7 @@ func (h handler) HandleUploadWeb(c *fiber.Ctx) error {
 		if blind {
 			return c.Render("response", fiber.Map{
 				"Text":        "Uploaded " + filename,
-				"Destination": "/dashboard",
+				"Destination": "/",
 			})
 		}
 		return c.Render("response", fiber.Map{
