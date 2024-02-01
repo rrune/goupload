@@ -1,0 +1,20 @@
+html {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    user-select: none;
+    -ms-user-select: None;
+    -moz-user-select: None;
+    -webkit-user-select: None;
+}
+
+form {
+    font-size: 0.5em;
+}
+
+.back {
+    font-size: 1rem;
+}

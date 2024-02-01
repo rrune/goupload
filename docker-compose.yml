@@ -2,9 +2,9 @@ version: "3"
 services:
   web:
     build: ./
-    container_name: uploader
+    container_name: goupload
     ports:
       - "12345:8080"
     volumes:
-      - ./data:/app/data
+      - ./volumeData:/app/data
     restart: unless-stopped

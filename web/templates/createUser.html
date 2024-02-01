@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create User</title>
+    <link rel="stylesheet" href="/static/css/master.css" />
+    <link rel="stylesheet" href="/static/css/response.css" />
+  </head>
+  <body>
+    <form class="centerForm" action="/dashboard/addUser" method="post">
+      <h3>ADD USER</h3>
+      <b>Root</b>: Can see and use this page<br />
+      <b>Blind</b>: Can upload files blind, different directory and not in
+      database<br />
+      <b>Restricted</b>: Can upload files that need login to download<br />
+      <b>Onetime</b>: User will be removed after uploading a file<br />
+      <br />
+      <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        required
+      /><br />
+      <input type="text" name="password" placeholder="Password" required />
+      <div>
+        <input type="checkbox" name="root" value="root" id="root" />
+        <label for="root">Root</label>
+        <input type="checkbox" name="blind" value="blind" id="blind" />
+        <label for="blind">Blind</label>
+      </div>
+      <div>
+        <input
+          type="checkbox"
+          name="restricted"
+          value="restricted"
+          id="restricted"
+        />
+        <label for="restricted">Restricted</label>
+        <input type="checkbox" name="onetime" value="onetime" id="onetime" />
+        <label for="onetime">Onetime</label>
+      </div>
+      <input type="submit" name="submit" value="Create" />
+    </form>
+  </body>
+</html>
+
+<br /><br /><br />
+<a class="back" href="/dashboard">Back</a>
