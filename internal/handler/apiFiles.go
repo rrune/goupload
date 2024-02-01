@@ -15,6 +15,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// edit
 func (h handler) HandleDownload(c *fiber.Ctx) error {
 	file, err := h.DB.Files.GetFileByShort(c.Params("short"))
 	if err == nil {
@@ -96,6 +97,7 @@ func (h handler) Upload(c *fiber.Ctx, username string, blindPerms bool, restrict
 			}
 		}
 
+		//edit
 		short, err = h.DB.Files.AddNewFile(models.File{
 			Filename:   file.Filename,
 			Author:     username,
