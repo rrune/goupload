@@ -143,8 +143,5 @@ func (h handler) HandleChangePerms(c *fiber.Ctx) error {
 			"Destination": "/dashboard",
 		})
 	}
-	return c.Render("response", fiber.Map{
-		"Text":        "Changed permissions of " + user.Username,
-		"Destination": "/dashboard",
-	})
+	return c.Redirect("/dashboard")
 }
