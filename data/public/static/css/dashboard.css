@@ -87,6 +87,24 @@
     border-color: var(--font-hover);
 }
 
+.addUserButton {
+    display: block;
+    text-align: center;
+    height: 1.5em;
+    width: 1.5em;
+    border: 2px solid var(--font);
+    border-radius: 0.5em;
+    margin: 0.6em auto;
+    padding: 0.2em;
+
+    color: var(--font)
+}
+
+.addUserButton:hover {
+    color: var(--font-hover);
+    border-color: var(--font-hover);
+}
+
 .md-em {
     font-size: 1em !important;
 }
