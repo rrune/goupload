@@ -197,10 +197,7 @@ func (h handler) HandleSwitchRestrict(c *fiber.Ctx) error {
 			"Text": "Could restrict/unrestrict " + short,
 		})
 	}
-	return c.Render("response", fiber.Map{
-		"Text":        "Restricted/Unrestriced " + short,
-		"Destination": "/dashboard",
-	})
+	return c.Redirect("/dashboard")
 }
 
 func (h handler) HandleDetails(c *fiber.Ctx) error {
