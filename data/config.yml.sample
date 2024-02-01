@@ -1,9 +1,0 @@
-url: https://example.com/ # needs / at the end
-port: "8080" # as string
-dbtype: <database type> # eg. mysql, no other database is implemented
-username: <database username>
-password: <database password>
-address: tcp(<ip>:<port>)/<database>
-jwtkey: secret # key to encrypt jwt keys
-shortlength: 5 # length of the download shorts
-uploadLimit: 2048 # in MB
