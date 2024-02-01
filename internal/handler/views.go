@@ -52,10 +52,7 @@ func (t template) AddUser(c *fiber.Ctx) error {
 func (t template) ChangePassword(c *fiber.Ctx) error {
 	username := c.Query("username", "")
 	if username == "" {
-		return c.Render("response", fiber.Map{
-			"Text":        "No username given",
-			"Destination": "/dashboard",
-		})
+		return c.SendStatus(400)
 	}
 	return c.Render("changePassword", fiber.Map{
 		"Username": username,
@@ -65,10 +62,7 @@ func (t template) ChangePassword(c *fiber.Ctx) error {
 func (t template) ChangePerms(c *fiber.Ctx) error {
 	username := c.Query("username", "")
 	if username == "" {
-		return c.Render("response", fiber.Map{
-			"Text":        "No username given",
-			"Destination": "/dashboard",
-		})
+		return c.SendStatus(400)
 	}
 	user, err := t.DB.Users.GetUserByUsername(username)
 	if util.CheckWLogs(err) {

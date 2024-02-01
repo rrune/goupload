@@ -47,17 +47,17 @@ func (h handler) HandleDownloadRestricted(c *fiber.Ctx) error {
 func (h handler) Upload(c *fiber.Ctx, username string, blindPerms bool, restrictedPerms bool, onetime bool, callback func(filename string, short string, blind bool) error) error {
 	blind := c.FormValue("blind") == "blind"
 	if blind && !blindPerms { // if blind is requested but not permitted
-		return c.SendStatus(405)
+		return c.SendStatus(403)
 	}
 
 	restricted := c.FormValue("restricted") == "restricted"
 	if restricted && !restrictedPerms { // if restricted is requested but not permitted
-		return c.SendStatus(405)
+		return c.SendStatus(403)
 	}
 
 	file, err := c.FormFile("file")
 	if util.CheckWLogs(err) {
-		return c.SendString("No file given")
+		return c.SendStatus(400)
 	}
 
 	var short string
@@ -72,7 +72,7 @@ func (h handler) Upload(c *fiber.Ctx, username string, blindPerms bool, restrict
 			if errors.Is(err, os.ErrNotExist) {
 				filenameUnique = true
 			} else if util.CheckWLogs(err) {
-				return c.SendStatus(405)
+				return c.SendStatus(500)
 			} else {
 				file.Filename = "_" + file.Filename
 			}
@@ -89,7 +89,7 @@ func (h handler) Upload(c *fiber.Ctx, username string, blindPerms bool, restrict
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				filenameUnique = true
 			} else if util.CheckWLogs(err) {
-				return c.SendStatus(405)
+				return c.SendStatus(500)
 			} else {
 				// ad an underscore to the filename if it's a duplicate
 				file.Filename = "_" + file.Filename
@@ -151,7 +151,7 @@ func (h handler) HandleUploadSimple(c *fiber.Ctx) error {
 
 	// The slice's length needs to be 2, otherwise the header was empty
 	if len(authBase64) < 2 {
-		c.SendString("No Authorization given")
+		c.SendStatus(403)
 	}
 	// [0] of slice is "Basic"
 	authByte, err := base64.StdEncoding.DecodeString(authBase64[1])
@@ -161,7 +161,7 @@ func (h handler) HandleUploadSimple(c *fiber.Ctx) error {
 	//basic auth is formated username:password
 	auth := strings.Split(string(authByte), ":")
 	if len(auth) != 2 {
-		return c.SendString("Malformed Authorization header")
+		c.SendStatus(403)
 	}
 	username := auth[0]
 	password := auth[1]
@@ -171,7 +171,7 @@ func (h handler) HandleUploadSimple(c *fiber.Ctx) error {
 		c.SendStatus(500)
 	}
 	if !correct {
-		return c.SendString("Wrong Authorization")
+		c.SendStatus(403)
 	}
 
 	return h.Upload(c, username, user.Blind, user.Restricted, user.Onetime, func(filename, short string, blind bool) error {
@@ -197,10 +197,7 @@ func (h handler) HandleRemoveFile(c *fiber.Ctx) error {
 		}
 	}
 	util.CheckWLogs(err)
-	return c.Render("response", fiber.Map{
-		"Text":        "Could not remove " + short,
-		"Destination": "/dashboard",
-	})
+	return c.SendStatus(500)
 }
 
 func (h handler) HandleMoveToBlind(c *fiber.Ctx) error {
@@ -213,10 +210,7 @@ func (h handler) HandleMoveToBlind(c *fiber.Ctx) error {
 		}
 	}
 	if util.CheckWLogs(err) {
-		return c.Render("response", fiber.Map{
-			"Text":        "Could not move " + short,
-			"Destination": "/dashboard",
-		})
+		return c.SendStatus(500)
 	}
 	return c.Redirect("/dashboard")
 }
@@ -225,9 +219,7 @@ func (h handler) HandleSwitchRestrict(c *fiber.Ctx) error {
 	short := c.Query("short", "")
 	err := h.DB.Files.SwitchRestrict(short)
 	if util.CheckWLogs(err) {
-		return c.Render("response", fiber.Map{
-			"Text": "Could restrict/unrestrict " + short,
-		})
+		return c.SendStatus(500)
 	}
 	return c.Redirect("/dashboard")
 }
@@ -240,10 +232,7 @@ func (h handler) HandleDetails(c *fiber.Ctx) error {
 		info, err = os.Stat("./data/uploads/" + file.File)
 	}
 	if util.CheckWLogs(err) {
-		return c.Render("response", fiber.Map{
-			"Text":        "Could not get details of " + short,
-			"Destination": "/dashboard",
-		})
+		return c.SendStatus(500)
 	}
 	infostrings := []string{
 		info.Name(),
