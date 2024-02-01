@@ -59,7 +59,11 @@
             </div>
           </div>
           <div class="buttons">
-            <a href="{{$.Url}}dashboard/removeUser?username={{.Username}}"><span class="material-icons-outlined">delete</span></a>
+            <div>
+              <a href="{{$.Url}}dashboard/changePerms?username={{.Username}}"><span class="material-icons-outlined">settings</span></a>
+              <a href="{{$.Url}}dashboard/changePassword?username={{.Username}}"><span class="material-icons-outlined">password</span></a>
+              <a href="{{$.Url}}dashboard/removeUser?username={{.Username}}"><span class="material-icons-outlined">delete</span></a>
+            </div>
           </div>
         </div>
     {{end}}

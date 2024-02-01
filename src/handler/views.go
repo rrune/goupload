@@ -29,11 +29,11 @@ func (t template) Index(c *fiber.Ctx) error {
 
 func (t template) Dashboard(c *fiber.Ctx) error {
 	users, err := t.DB.Users.GetAllUsers()
-	if util.Check(err) {
+	if util.CheckWLogs(err) {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	files, err := t.DB.Files.GetAllFiles()
-	if util.Check(err) {
+	if util.CheckWLogs(err) {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	// reverse the slice to show newest first
@@ -42,6 +42,36 @@ func (t template) Dashboard(c *fiber.Ctx) error {
 		"Users": users,
 		"Files": files,
 		"Url":   t.Url,
+	})
+}
+
+func (t template) AddUser(c *fiber.Ctx) error {
+	return c.Render("createUser", fiber.Map{})
+}
+
+func (t template) ChangePassword(c *fiber.Ctx) error {
+	username := c.Query("username", "")
+	if username == "" {
+		return c.Render("response", fiber.Map{
+			"Text":        "No username given",
+			"Destination": "/dashboard",
+		})
+	}
+	return c.Render("changePassword", fiber.Map{
+		"Username": username,
+	})
+}
+
+func (t template) ChangePerms(c *fiber.Ctx) error {
+	username := c.Query("username", "")
+	if username == "" {
+		return c.Render("response", fiber.Map{
+			"Text":        "No username given",
+			"Destination": "/dashboard",
+		})
+	}
+	return c.Render("changePerms", fiber.Map{
+		"Username": username,
 	})
 }
 

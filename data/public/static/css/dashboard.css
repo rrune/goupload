@@ -34,7 +34,7 @@
 }
 
 .entry .left {
-    flex-basis: 70%;
+    flex-basis: 67%;
 }
 
 .entry .left .link {
@@ -44,7 +44,7 @@
 }
 
 .entry .right {
-    flex-basis: 30%;
+    flex-basis: 33%;
     text-align:  right;
 }
 
