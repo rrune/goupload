@@ -25,9 +25,9 @@
       />
       <br />
       <div>
-        <input type="checkbox" name="root" value="root" id="root" />
+        <input type="checkbox" name="root" value="root" id="root" {{if .User.Root}}checked{{end}} />
         <label for="root">Root</label>
-        <input type="checkbox" name="blind" value="blind" id="blind" />
+        <input type="checkbox" name="blind" value="blind" id="blind" {{if .User.Blind}}checked{{end}}/>
         <label for="blind">Blind</label>
       </div>
       <div>
@@ -36,9 +36,10 @@
           name="restricted"
           value="restricted"
           id="restricted"
+          {{if .User.Restricted}}checked{{end}}
         />
         <label for="restricted">Restricted</label>
-        <input type="checkbox" name="onetime" value="onetime" id="onetime" />
+        <input type="checkbox" name="onetime" value="onetime" id="onetime" {{if .User.Onetime}}checked{{end}}/>
         <label for="onetime">Onetime</label>
       </div>
       <input type="submit" name="submit" value="Change" />

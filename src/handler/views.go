@@ -70,8 +70,17 @@ func (t template) ChangePerms(c *fiber.Ctx) error {
 			"Destination": "/dashboard",
 		})
 	}
+	user, err := t.DB.Users.GetUserByUsername(username)
+	if util.CheckWLogs(err) {
+		return c.Render("response", fiber.Map{
+			"Text":        "Database error",
+			"Destination": "/dashboard",
+		})
+	}
+	user.Password = ""
 	return c.Render("changePerms", fiber.Map{
 		"Username": username,
+		"User":     user,
 	})
 }
 
