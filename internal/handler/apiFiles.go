@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/base64"
-	"errors"
 	"os"
 	"strconv"
 	"strings"
@@ -12,7 +11,6 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/rrune/goupload/internal/models"
 	"github.com/rrune/goupload/internal/util"
-	"gorm.io/gorm"
 )
 
 // edit
@@ -65,39 +63,20 @@ func (h handler) Upload(c *fiber.Ctx, username string, blindPerms bool, restrict
 	switch blind {
 	case true:
 
-		// ensure filenames are unique
-		filenameUnique := false
-		for !filenameUnique {
-			_, err := os.Stat("./data/blind/" + file.Filename)
-
-			if errors.Is(err, os.ErrNotExist) {
-				filenameUnique = true
-			} else if util.CheckWLogs(err) {
-				return c.SendStatus(500)
-			} else {
-				file.Filename = "_" + file.Filename
-			}
+		file.Filename, err = util.EnsureUniqueFilenames("./data/blind/", file.Filename)
+		if util.CheckWLogs(err) {
+			return c.SendStatus(500)
 		}
 
 		err = c.SaveFile(file, "./data/blind/"+file.Filename)
 
 	case false:
 
-		// ensure filenames are unique
-		filenameUnique := false
-		for !filenameUnique {
-			_, err := h.DB.Files.GetFileByName(file.Filename)
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				filenameUnique = true
-			} else if util.CheckWLogs(err) {
-				return c.SendStatus(500)
-			} else {
-				// ad an underscore to the filename if it's a duplicate
-				file.Filename = "_" + file.Filename
-			}
+		file.Filename, err = util.EnsureUniqueFilenames("./data/uploads/", file.Filename)
+		if util.CheckWLogs(err) {
+			return c.SendStatus(500)
 		}
 
-		//edit
 		short, err = h.DB.Files.AddNewFile(models.File{
 			Filename:   file.Filename,
 			Author:     username,

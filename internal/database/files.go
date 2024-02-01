@@ -43,7 +43,6 @@ func (d FilesDB) GetFileByName(filename string) (f models.File, err error) {
 	return
 }
 
-// edit
 func (d FilesDB) AddNewFile(file models.File) (short string, err error) {
 	short, err = d.getShort()
 	if util.Check(err) {

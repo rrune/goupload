@@ -1,6 +1,7 @@
 package util
 
 import (
+	"errors"
 	"log"
 	"os"
 )
@@ -36,5 +37,21 @@ func CheckPanic(err error) {
 			log.Fatal(err, err2)
 		}
 		panic(err)
+	}
+}
+
+func EnsureUniqueFilenames(path string, filename string) (r string, err error) {
+	r = filename
+	for {
+		_, err = os.Stat(path + r)
+
+		if errors.Is(err, os.ErrNotExist) {
+			err = nil
+			return
+		} else if Check(err) {
+			return
+		} else {
+			r = "_" + r
+		}
 	}
 }
