@@ -175,9 +175,9 @@ func (h handler) HandleMoveToBlind(c *fiber.Ctx) error {
 	short := c.Query("short", "")
 	file, err := h.DB.Files.GetFileByShort(short)
 	if err == nil {
-		err = h.DB.Files.RemoveFileByShort(short)
+		err = os.Rename("./data/uploads/"+file.File, "./data/blind/"+file.File)
 		if err == nil {
-			err = os.Rename("./data/uploads/"+file.File, "./data/blind/"+file.File)
+			err = h.DB.Files.RemoveFileByShort(short)
 		}
 	}
 	if util.CheckWLogs(err) {
