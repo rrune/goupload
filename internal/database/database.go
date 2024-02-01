@@ -12,13 +12,17 @@ func New(c models.Config) Database {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	util.CheckPanic(err)
 	d := Database{
-		Users: UserDB{db},
-		Files: FilesDB{db, c.ShortLength},
+		Users:  UserDB{db},
+		Shorts: ShortDB{db},
+		Files:  FilesDB{db, c.ShortLength},
+		Pastes: PastesDB{db, c.ShortLength},
 	}
 	return d
 }
 
 type Database struct {
-	Users UserDB
-	Files FilesDB
+	Users  UserDB
+	Shorts ShortDB
+	Files  FilesDB
+	Pastes PastesDB
 }

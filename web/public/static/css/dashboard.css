@@ -7,19 +7,6 @@
     top: 10vh;
 }
 
-.centerForm {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: center;
-    align-content: stretch;
-    user-select: none;
-    -ms-user-select: None;
-    -moz-user-select: None;
-    -webkit-user-select: None;
-}
-
 .box-content {
     max-height: 75vh;
     overflow-x: hidden;
@@ -48,77 +35,10 @@
     text-align:  right;
 }
 
-.entry .title {
-    display: inline-block;
-    font-size: 1.1em;
-    font-weight: bold;
-}
-
-.entry .info {
-    size: 100%;
-    font-size: 0.9em;
-}
-
-.entry .info span {
-    margin-right: 0.8em;
-}
-
 .entry .buttons {
     display: flex;
     justify-content: flex-end;
     flex-direction: column;
-}
-
-.entry .buttons a {
-    display: inline-block;
-    text-align: center;
-    height: 1.5em;
-    width: 1.5em;
-    border: 2px solid var(--font);
-    border-radius: 0.5em;
-    margin: 0.15em auto;
-    padding: 0.2em;
-
-    color: var(--font)
-}
-
-.entry .buttons a:hover {
-    color: var(--font-hover);
-    border-color: var(--font-hover);
-}
-
-.addUserButton {
-    display: block;
-    text-align: center;
-    height: 1.5em;
-    width: 1.5em;
-    border: 2px solid var(--font);
-    border-radius: 0.5em;
-    margin: 0.6em auto;
-    padding: 0.2em;
-
-    color: var(--font)
-}
-
-.addUserButton:hover {
-    color: var(--font-hover);
-    border-color: var(--font-hover);
-}
-
-.md-em {
-    font-size: 1em !important;
-}
-
-.summaryHeader {
-    text-align: center;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-    font-size: 1em;
-    margin: 1.5em auto;
-    user-select: none;
-    -ms-user-select: None;
-    -moz-user-select: None;
-    -webkit-user-select: None;
 }
 
 /* move the buttons down when screen gets smaller */
@@ -143,3 +63,26 @@
         display: inline-block;
     }
   }
+
+.addUserButton {
+    margin: 0.6em auto;
+    text-align: center;
+}
+
+.addUserButton a {
+    display: block;
+}
+
+.pasteText {
+    background-color: var(--background);
+
+    padding: 0.4em;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    overflow-wrap: break-word;
+}
+
+.removeBottomRadius {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}

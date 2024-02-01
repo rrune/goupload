@@ -32,6 +32,16 @@ type UserFromForm struct {
 	Restricted string `form:"restricted"`
 }
 
+type Short struct {
+	Short      string    `db:"Short"`
+	Type       string    `db:"Type"`
+	Author     string    `db:"Author"`
+	Timestamp  time.Time `db:"Timestamp"`
+	Ip         string    `db:"Ip"`
+	Restricted bool      `db:"Restricted"`
+	Downloads  int       `db:"Downloads"`
+}
+
 type File struct {
 	Filename   string    `db:"Filename"`
 	Short      string    `db:"Short"`
@@ -42,7 +52,7 @@ type File struct {
 	Downloads  int       `db:"Downloads"`
 }
 
-type Text struct {
+type Paste struct {
 	Text       string    `db:"Text"`
 	Short      string    `db:"Short"`
 	Author     string    `db:"Author"`

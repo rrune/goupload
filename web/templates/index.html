@@ -17,27 +17,44 @@
         <a href="/dashboard">Dashboard</a>
       {{end}}
     </div>
-    <div class="welcome">
-      Welcome,<br>
-      <b>{{.Username}}</b>
-    </div>
-    <form id="upload" class="form" action="upload" method="post" enctype="multipart/form-data">
-      <noscript>
-        You have JavaScript disabled. The file will still be uploaded but you won't see a progress bar. Just wait
-      </noscript>
-      <div>
-        <input type="file" name="file" id="file" required>
-        {{if .Blind}}
-          <input type="checkbox" id="blind" name="blind" value="blind">
-          <label for="blind">Blind</label>
-        {{end}}
-        {{if .Restricted}}
-          <input type="checkbox" id="restricted" name="restricted" value="restricted">
-          <label for="restricted">Restricted</label>
-        {{end}}
+
+    <div class="upload">
+      <div class="welcome">
+        Welcome,<br>
+        <b>{{.Username}}</b>
       </div>
-      <input type="submit" value="Upload" name="submit" onclick="changeScreen()">
-    </form>
+      <form id="upload" class="form" action="upload" method="post" enctype="multipart/form-data">
+        <noscript>
+          You have JavaScript disabled. The file will still be uploaded but you won't see a progress bar. Just wait
+        </noscript>
+        <div>
+          <input type="file" name="file" id="file" required>
+          {{if .Blind}}
+            <input type="checkbox" id="blind" name="blind" value="blind">
+            <label for="blind">Blind</label>
+          {{end}}
+          {{if .Restricted}}
+            <input type="checkbox" id="restrictedUpload" name="restricted" value="restricted">
+            <label for="restrictedUpload">Restricted</label>
+          {{end}}
+        </div>
+        <input type="submit" value="Upload" name="submit" onclick="changeScreen()">
+      </form>
+    </div>
+
+    <div class="paste">
+      <form action="paste" method="post">
+        <textarea name="text"></textarea>
+        <div class="preventSelect">
+          {{if .Restricted}}
+          <input type="checkbox" id="restrictedPaste" name="restricted" value="restricted">
+          <label for="restrictedPaste">Restricted</label>
+          {{end}}
+          <input type="submit" value="Upload" name="submit">
+        </div>
+      </form>
+    </div>
+
   </div>
   <div id="progresswrapper">
     <label for="progressbar">Upload progress:</label>

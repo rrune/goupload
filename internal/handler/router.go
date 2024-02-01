@@ -53,6 +53,7 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 	app.Get("/", auth, template.Index)
 	app.Post("/upload", auth, handler.HandleUploadWeb)
 	app.Post("/", handler.HandleUploadSimple) // endpoint for simple upload, for example with curl
+	app.Post("/paste", auth, handler.HandlePaste)
 
 	dashboard := app.Group("/dashboard", auth)
 	dashboard.Use(func(c *fiber.Ctx) error {
@@ -71,6 +72,8 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 	dashboard.Get("/switchRestrict", handler.HandleSwitchRestrict)
 	dashboard.Get("/details", handler.HandleDetails)
 
+	dashboard.Get("/removePaste", handler.HandleRemovePaste)
+
 	dashboard.Get("/removeUser", handler.HandleRemoveUser)
 
 	dashboard.Get("/addUser", template.AddUser)
@@ -82,8 +85,11 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 	dashboard.Get("/changePerms", template.ChangePerms)
 	dashboard.Post("/changePerms", handler.HandleChangePerms)
 
-	app.Get("/:short", handler.HandleDownload)
-	app.Get("/r/:short", auth, handler.HandleDownloadRestricted)
+	app.Get("/:short", handler.HandleShort)
+	app.Get("/r/:short", auth, handler.HandleShort)
+
+	app.Get("/raw/:short", handler.HandleShortsRaw)
+	app.Get("/raw/r/:short", auth, handler.HandleShortsRaw)
 
 	app.Listen(":" + port)
 }

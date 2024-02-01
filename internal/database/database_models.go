@@ -13,11 +13,11 @@ type DB_Short struct {
 }
 
 type DB_File struct {
-	Short    string `db:"short"`
-	Filename string `db:"short"`
+	Short    string `db:"Short"`
+	Filename string `db:"Filename"`
 }
 
-type DB_Text struct {
-	Short string `db:"short"`
-	Text  string `db:"short"`
+type DB_Paste struct {
+	Short string `db:"Short"`
+	Text  string `db:"Text"`
 }

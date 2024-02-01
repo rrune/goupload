@@ -35,15 +35,31 @@ func (t template) Dashboard(c *fiber.Ctx) error {
 	if util.CheckWLogs(err) {
 		return c.SendStatus(500)
 	}
+	pastes, err := t.DB.Pastes.GetAllPastes()
+	if util.CheckWLogs(err) {
+		return c.SendStatus(500)
+	}
+
+	for i, paste := range pastes {
+		if len(paste.Text) > 150 {
+			pastes[i].Text = paste.Text[:150] + "..."
+		}
+	}
+
 	// sort the slice to show newest first
 	sort.Slice(files, func(i, j int) bool {
 		return files[i].Timestamp.After(files[j].Timestamp)
 	})
 
+	sort.Slice(pastes, func(i, j int) bool {
+		return pastes[i].Timestamp.After(pastes[j].Timestamp)
+	})
+
 	return c.Render("dashboard", fiber.Map{
-		"Users": users,
-		"Files": files,
-		"Url":   t.Url,
+		"Users":  users,
+		"Files":  files,
+		"Pastes": pastes,
+		"Url":    t.Url,
 	})
 }
 

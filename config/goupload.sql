@@ -22,7 +22,7 @@ CREATE TABLE Files (
     Filename varchar(255) NOT NULL UNIQUE,
 );
 
-CREATE TABLE Texts (
+CREATE TABLE Pastes (
     Short varchar(255) NOT NULL UNIQUE,
     Text text NOT NULL,
 );

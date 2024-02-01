@@ -68,84 +68,42 @@
         </div>
         {{end}}
       </div>
-      <a class="addUserButton" href="{{$.Url}}dashboard/addUser"><span class="material-icons-outlined">add</span></a>
+      <div class="buttons addUserButton">
+        <a href="{{$.Url}}dashboard/addUser"><span class="material-icons-outlined">add</span></a>
+      </div>
     </div>
 
     <div class="box">
-      <h3>MANAGE USERS</h3>
+      <h3>PASTES</h3>
 
-      <details>
-        <summary class="summaryHeader"><span>CREATE USER</span></summary>
         <div class="box-content">
-          <b>Root</b>: Can see and use this page<br>
-          <b>Blind</b>: Can upload files blind, different directory and not in database<br>
-          <b>Restricted</b>: Can upload files that need login to download<br>
-          <b>Onetime</b>: User will be removed after uploading a file<br>
-          <br>
-          <form class="centerForm" action="/dashboard/addUser" method="post">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="text" name="password" placeholder="Password" required>
-            <div>
-              <input type="checkbox" name="root" value="root" id="root">
-              <label for="root">Root</label>
-              <input type="checkbox" name="blind" value="blind" id="blind">
-              <label for="blind">Blind</label>
-            </div>
-            <div>
-              <input type="checkbox" name="restricted" value="restricted" id="restricted">
-              <label for="restricted">Restricted</label>
-              <input type="checkbox" name="onetime" value="onetime" id="onetime">
-              <label for="onetime">Onetime</label>
-            </div>
-            <input type="submit" name="submit" value="Create">
-          </form>
-        </div>
-      </details>
+          {{range .Pastes}}
+            <div class="entry removeBottomRadius">
+              <div class="left">
+                <span class="title"><a class="link" href="{{$.Url}}{{.Short}}">{{$.Url}}{{.Short}}</a></span>
+                <div class="info">
+                  <span>{{.Author}}</span>
+                  <span>{{formatDate .Timestamp}}</span>
+                  {{if .Restricted}}
+                  <span class="material-icons-outlined md-em">lock</span>
+                  {{end}}
+                </div>
+              </div>
 
-      <details>
-        <summary class="summaryHeader"><span>CHANGE PASSWORD</span></summary>
-        <div class="box-content">
-          <form class="centerForm" action="/dashboard/changePassword" method="post">
-            <select name="username" required>
-              {{range .Users}}
-                  <option value="{{.Username}}">{{.Username}}</option>
-              {{end}}
-            </select>
-            <br>
-            <div>
-              <input type="text" name="password" placeholder="New Password">
-              <input type="submit" name="submit" value="Change">
+              <div class="buttons">
+                <div>
+                  <a href="{{$.Url}}raw/{{.Short}}"><span class="material-icons-outlined">edit</span></a>
+                  <!-- <a href="{{$.Url}}raw/{{.Short}}"><span class="material-icons-outlined">raw_on</span></a> -->
+                  <a href="{{$.Url}}dashboard/switchRestrict?short={{.Short}}"><span class="material-icons-outlined">key</span></a>
+                  <a href="{{$.Url}}dashboard/removePaste?short={{.Short}}"><span class="material-icons-outlined">delete</span></a>
+                </div>
+              </div>
             </div>
-          </form>
+            <div class="pasteText">
+              {{.Text}}
+            </div>
+          {{end}}
         </div>
-      </details>
-
-      <details>
-        <summary class="summaryHeader"><span>CHANGE PERMISSIONS</span></summary>
-        <div class="box-content">
-          <form class="centerForm" action="/dashboard/changePerms" method="post">
-            <select name="username" required>
-              {{range .Users}}
-                  <option value="{{.Username}}">{{.Username}}</option>
-              {{end}}
-            </select>
-            <br>
-            <div>
-              <input type="checkbox" name="root" value="root" id="root">
-              <label for="root">Root</label>
-              <input type="checkbox" name="blind" value="blind" id="blind">
-              <label for="blind">Blind</label>
-            </div>
-            <div>
-              <input type="checkbox" name="restricted" value="restricted" id="restricted">
-              <label for="restricted">Restricted</label>
-              <input type="checkbox" name="onetime" value="onetime" id="onetime">
-              <label for="onetime">Onetime</label>
-            </div>
-            <input type="submit" name="submit" value="Change">
-          </form>
-        </div>
-      </details>
 
     </div>
   </div>

@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sometype+Mono');
 :root {
     --background: #1b1b1b;
     --background-accent: #242424;
@@ -136,4 +137,47 @@ body {
     padding: 10px 15px;
     margin-top: 3%;
     border-radius: 8px;
+}
+
+.box .entry .title {
+    display: inline-block;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.box .entry .info {
+    font-size: 0.9em;
+}
+
+.box .entry .info span {
+    margin-right: 0.8em;
+}
+
+.preventSelect {
+    user-select: none;
+    -ms-user-select: None;
+    -moz-user-select: None;
+    -webkit-user-select: None;
+}
+
+.buttons a {
+    display: inline-block;
+    text-align: center;
+    height: 1.5em;
+    width: 1.5em;
+    border: 2px solid var(--font);
+    border-radius: 0.5em;
+    margin: 0.15em auto;
+    padding: 0.2em;
+
+    color: var(--font)
+}
+
+.buttons a:hover {
+    color: var(--font-hover);
+    border-color: var(--font-hover);
+}
+
+.md-em {
+    font-size: 1em !important;
 }

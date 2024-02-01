@@ -9,38 +9,17 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/rrune/goupload/internal/database"
 	"github.com/rrune/goupload/internal/models"
 	"github.com/rrune/goupload/internal/util"
 )
 
-// edit
-func (h handler) HandleDownload(c *fiber.Ctx) error {
+func (h handler) Download(c *fiber.Ctx) error {
 	file, err := h.DB.Files.GetFileByShort(c.Params("short"))
-	if err == nil {
-		err = h.DB.Files.UpdateDownloadCounter(c.Params("short"), file.Downloads)
-		// check error, if error occours still send file if everything else works
-		util.CheckWLogs(err)
-		if file.Restricted {
-			return c.Redirect("/r/" + c.Params("short"))
-		}
-
-		return c.Download("./data/uploads/" + file.Filename)
+	if util.CheckWLogs(err) {
+		return c.SendStatus(500)
 	}
-	return c.Render("response", fiber.Map{
-		"Text":        "Short does not exist",
-		"Destination": "/",
-	})
-}
-
-func (h handler) HandleDownloadRestricted(c *fiber.Ctx) error {
-	file, err := h.DB.Files.GetFileByShort(c.Params("short"))
-	if err == nil {
-		return c.Download("./data/uploads/" + file.Filename)
-	}
-	return c.Render("response", fiber.Map{
-		"Text":        "Short does not exist",
-		"Destination": "/",
-	})
+	return c.Download("./data/uploads/" + file.Filename)
 }
 
 func (h handler) Upload(c *fiber.Ctx, username string, blindPerms bool, restrictedPerms bool, onetime bool, callback func(filename string, short string, blind bool) error) error {
@@ -165,6 +144,12 @@ func (h handler) HandleUploadSimple(c *fiber.Ctx) error {
 
 func (h handler) HandleRemoveFile(c *fiber.Ctx) error {
 	short := c.Query("short", "")
+
+	exist, err := database.CheckIfShortExists(h.DB.Files.DB, short)
+	if util.CheckWLogs(err) || !exist {
+		return c.SendStatus(400)
+	}
+
 	file, err := h.DB.Files.GetFileByShort(short)
 	if err == nil {
 
@@ -190,15 +175,6 @@ func (h handler) HandleMoveToBlind(c *fiber.Ctx) error {
 			err = h.DB.Files.RemoveFileByShort(short)
 		}
 	}
-	if util.CheckWLogs(err) {
-		return c.SendStatus(500)
-	}
-	return c.Redirect("/dashboard")
-}
-
-func (h handler) HandleSwitchRestrict(c *fiber.Ctx) error {
-	short := c.Query("short", "")
-	err := h.DB.Files.SwitchRestrict(short)
 	if util.CheckWLogs(err) {
 		return c.SendStatus(500)
 	}

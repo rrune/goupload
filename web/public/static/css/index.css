@@ -13,6 +13,37 @@ body{
     -webkit-user-select: None;
 }
 
+.upload {
+    width: 100%;
+    height: 95vh;
+}
+
+.paste {
+    width: 100%;
+    height: 65vh;
+}
+
+.paste form {
+    text-align: center;
+}
+
+.paste textarea {
+    width: 65%;
+    height: 45vh;
+    resize: none;
+    background-color: var(--background-accent);
+    outline: none;
+    border: none;
+    border-radius: 8px;
+
+    padding: 1.15em;
+    padding-bottom: 30px;
+
+    font-family: "Sometype Mono";
+    color: var(--font);
+    font-size: 1em;
+}
+
 #progresswrapper {
     text-align: center;
     position: absolute;
