@@ -15,12 +15,12 @@ type Config struct {
 }
 
 type User struct {
-	Username   string `db:"username" form:"username"`
-	Password   string `db:"password" form:"password"`
-	Root       bool   `db:"root" form:"root"`
-	Blind      bool   `db:"blind" form:"blind"`
-	Onetime    bool   `db:"onetime" form:"onetime"`
-	Restricted bool   `db:"restricted" form:"restricted"`
+	Username   string `db:"Username" form:"username"`
+	Password   string `db:"Password" form:"password"`
+	Root       bool   `db:"Root" form:"root"`
+	Blind      bool   `db:"Blind" form:"blind"`
+	Onetime    bool   `db:"Onetime" form:"onetime"`
+	Restricted bool   `db:"Restricted" form:"restricted"`
 }
 
 type UserFromForm struct {
@@ -33,13 +33,13 @@ type UserFromForm struct {
 }
 
 type File struct {
-	File       string    `db:"file"`
-	Author     string    `db:"author"`
-	Timestamp  time.Time `db:"timestamp"`
-	Short      string    `db:"short"`
-	Ip         string    `db:"ip"`
-	Restricted bool      `db:"restricted"`
-	Downloads  int       `db:"downloads"`
+	Filename   string    `db:"Filename"`
+	Author     string    `db:"Author"`
+	Timestamp  time.Time `db:"Timestamp"`
+	Short      string    `db:"Short"`
+	Ip         string    `db:"Ip"`
+	Restricted bool      `db:"Restricted"`
+	Downloads  int       `db:"Downloads"`
 }
 
 type Login struct {

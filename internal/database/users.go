@@ -13,12 +13,12 @@ type UserDB struct {
 }
 
 func (d UserDB) GetAllUsers() (u []models.User, err error) {
-	err = d.DB.Table("uploaderUsers").Find(&u).Error
+	err = d.DB.Table("Users").Find(&u).Error
 	return
 }
 
 func (d UserDB) GetUserByUsername(username string) (u models.User, err error) {
-	err = d.DB.Table("uploaderUsers").First(&u, "username = ?", username).Error
+	err = d.DB.Table("Users").First(&u, "Username = ?", username).Error
 	return
 }
 
@@ -35,7 +35,7 @@ func (d UserDB) CreateUser(user *models.User) (err error) {
 		return
 	}
 
-	err = d.DB.Table("uploaderUsers").Create(&user).Error
+	err = d.DB.Table("Users").Create(&user).Error
 	return
 }
 
@@ -49,7 +49,7 @@ func (d UserDB) RemoveUserByUsername(username string) (err error) {
 		return
 	}
 
-	err = d.DB.Table("uploaderUsers").Where("username = ?", username).Delete(&models.User{}).Error
+	err = d.DB.Table("Users").Where("Username = ?", username).Delete(&models.User{}).Error
 	return
 }
 
@@ -58,11 +58,11 @@ func (d UserDB) ChangePassword(username string, password string) (err error) {
 	if util.Check(err) {
 		return
 	}
-	err = d.DB.Table("uploaderUsers").Where("username = ?", username).Update("password", hashedPassword).Error
+	err = d.DB.Table("Users").Where("Username = ?", username).Update("Password", hashedPassword).Error
 	return
 }
 
 func (d UserDB) ChangePerms(user models.User) (err error) {
-	err = d.DB.Table("uploaderUsers").Where("username = ?", user.Username).Update("root", user.Root).Update("blind", user.Blind).Update("restricted", user.Restricted).Update("onetime", user.Onetime).Error
+	err = d.DB.Table("Users").Where("Username = ?", user.Username).Update("Root", user.Root).Update("Blind", user.Blind).Update("Restricted", user.Restricted).Update("Onetime", user.Onetime).Error
 	return
 }

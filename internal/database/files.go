@@ -15,17 +15,17 @@ type FilesDB struct {
 }
 
 func (d FilesDB) GetAllFiles() (u []models.File, err error) {
-	err = d.DB.Table("uploadedFiles").Find(&u).Error
+	err = d.DB.Table("Files").Find(&u).Error
 	return
 }
 
 func (d FilesDB) GetFileByShort(short string) (f models.File, err error) {
-	err = d.DB.Table("uploadedFiles").First(&f, "short = ?", short).Error
+	err = d.DB.Table("Files").First(&f, "Short = ?", short).Error
 	return
 }
 
 func (d FilesDB) GetFileByName(short string) (f models.File, err error) {
-	err = d.DB.Table("uploadedFiles").First(&f, "file = ?", short).Error
+	err = d.DB.Table("Files").First(&f, "Filename = ?", short).Error
 	return
 }
 
@@ -33,12 +33,12 @@ func (d FilesDB) AddNewFile(file models.File) (short string, err error) {
 	short = d.getShort()
 	file.Short = short
 
-	err = d.DB.Table("uploadedFiles").Create(&file).Error
+	err = d.DB.Table("Files").Create(&file).Error
 	return
 }
 
 func (d FilesDB) RemoveFileByShort(short string) (err error) {
-	err = d.DB.Table("uploadedFiles").Where("short = ?", short).Delete(&models.File{}).Error
+	err = d.DB.Table("Files").Where("Short = ?", short).Delete(&models.File{}).Error
 	return
 }
 
@@ -47,7 +47,7 @@ func (d FilesDB) SwitchRestrict(short string) (err error) {
 	if util.Check(err) {
 		return
 	}
-	err = d.DB.Table("uploadedFiles").Where("short = ?", short).Update("restricted", !file.Restricted).Error
+	err = d.DB.Table("Files").Where("Short = ?", short).Update("Restricted", !file.Restricted).Error
 	return
 }
 
@@ -65,7 +65,7 @@ func (d FilesDB) getShort() string {
 }
 
 func (d FilesDB) UpdateDownloadCounter(short string, downloads int) (err error) {
-	err = d.DB.Table("uploadedFiles").Where("short = ?", short).Update("downloads", downloads+1).Error
+	err = d.DB.Table("Files").Where("Short = ?", short).Update("Downloads", downloads+1).Error
 	return
 }
 

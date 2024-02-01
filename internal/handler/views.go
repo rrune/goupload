@@ -1,12 +1,11 @@
 package handler
 
 import (
-	"slices"
+	"sort"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/rrune/goupload/internal/database"
-	"github.com/rrune/goupload/internal/models"
 	"github.com/rrune/goupload/internal/util"
 )
 
@@ -30,14 +29,17 @@ func (t template) Index(c *fiber.Ctx) error {
 func (t template) Dashboard(c *fiber.Ctx) error {
 	users, err := t.DB.Users.GetAllUsers()
 	if util.CheckWLogs(err) {
-		return c.SendStatus(fiber.StatusInternalServerError)
+		return c.SendStatus(500)
 	}
 	files, err := t.DB.Files.GetAllFiles()
 	if util.CheckWLogs(err) {
-		return c.SendStatus(fiber.StatusInternalServerError)
+		return c.SendStatus(500)
 	}
-	// reverse the slice to show newest first
-	slices.Reverse[[]models.File](files)
+	// sort the slice to show newest first
+	sort.Slice(files, func(i, j int) bool {
+		return files[i].Timestamp.After(files[j].Timestamp)
+	})
+
 	return c.Render("dashboard", fiber.Map{
 		"Users": users,
 		"Files": files,

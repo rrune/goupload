@@ -25,7 +25,7 @@ func (h handler) HandleDownload(c *fiber.Ctx) error {
 			return c.Redirect("/r/" + c.Params("short"))
 		}
 
-		return c.Download("./data/uploads/" + file.File)
+		return c.Download("./data/uploads/" + file.Filename)
 	}
 	return c.Render("response", fiber.Map{
 		"Text":        "Short does not exist",
@@ -36,7 +36,7 @@ func (h handler) HandleDownload(c *fiber.Ctx) error {
 func (h handler) HandleDownloadRestricted(c *fiber.Ctx) error {
 	file, err := h.DB.Files.GetFileByShort(c.Params("short"))
 	if err == nil {
-		return c.Download("./data/uploads/" + file.File)
+		return c.Download("./data/uploads/" + file.Filename)
 	}
 	return c.Render("response", fiber.Map{
 		"Text":        "Short does not exist",
@@ -97,7 +97,7 @@ func (h handler) Upload(c *fiber.Ctx, username string, blindPerms bool, restrict
 		}
 
 		short, err = h.DB.Files.AddNewFile(models.File{
-			File:       file.Filename,
+			Filename:   file.Filename,
 			Author:     username,
 			Timestamp:  time.Now(),
 			Ip:         c.IP(),
@@ -187,7 +187,7 @@ func (h handler) HandleRemoveFile(c *fiber.Ctx) error {
 	file, err := h.DB.Files.GetFileByShort(short)
 	if err == nil {
 
-		err = os.Remove("./data/uploads/" + file.File)
+		err = os.Remove("./data/uploads/" + file.Filename)
 		if err == nil {
 
 			err = h.DB.Files.RemoveFileByShort(short)
@@ -204,7 +204,7 @@ func (h handler) HandleMoveToBlind(c *fiber.Ctx) error {
 	short := c.Query("short", "")
 	file, err := h.DB.Files.GetFileByShort(short)
 	if err == nil {
-		err = os.Rename("./data/uploads/"+file.File, "./data/blind/"+file.File)
+		err = os.Rename("./data/uploads/"+file.Filename, "./data/blind/"+file.Filename)
 		if err == nil {
 			err = h.DB.Files.RemoveFileByShort(short)
 		}
@@ -229,7 +229,7 @@ func (h handler) HandleDetails(c *fiber.Ctx) error {
 	file, err := h.DB.Files.GetFileByShort(short)
 	var info os.FileInfo
 	if err == nil {
-		info, err = os.Stat("./data/uploads/" + file.File)
+		info, err = os.Stat("./data/uploads/" + file.Filename)
 	}
 	if util.CheckWLogs(err) {
 		return c.SendStatus(500)
