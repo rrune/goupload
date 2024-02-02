@@ -85,6 +85,9 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 	dashboard.Get("/changePerms", template.ChangePerms)
 	dashboard.Post("/changePerms", handler.HandleChangePerms)
 
+	dashboard.Get("/editPaste", template.EditPaste)
+	dashboard.Post("/editPaste", handler.HandleEditPaste)
+
 	app.Get("/:short", handler.HandleShort)
 	app.Get("/r/:short", auth, handler.HandleShort)
 

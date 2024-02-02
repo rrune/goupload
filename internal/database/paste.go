@@ -82,24 +82,11 @@ func (d PastesDB) RemovePasteByShort(short string) (err error) {
 	return
 }
 
-func (d PastesDB) SwitchRestrict(short string) (err error) {
-	paste, err := d.GetPasteByShort(short)
-	if util.Check(err) {
-		return
-	}
+func (d PastesDB) ChangeTextByShort(short string, text string) (err error) {
 	err = d.DB.
-		Table("Shorts").
+		Table("Pastes").
 		Where("Short = ?", short).
-		Update("Restricted", !paste.Restricted).
-		Error
-	return
-}
-
-func (d PastesDB) UpdateDownloadCounter(short string, downloads int) (err error) {
-	err = d.DB.
-		Table("Shorts").
-		Where("Short = ?", short).
-		Update("Downloads", downloads+1).
+		Update("Text", text).
 		Error
 	return
 }

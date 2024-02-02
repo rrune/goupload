@@ -14,7 +14,7 @@
     <div class="box">
         <div class="entry removeBottomRadius">
             <div class="left">
-              <span class="title"><a class="link" href="{{$.Url}}{{.Paste.Short}}">{{$.Url}}{{.Paste.Short}}</a></span>
+              <span class="title">{{$.Url}}{{.Paste.Short}}</span>
               <div class="info">
                 <span>{{.Paste.Author}}</span>
                 <span>{{formatDate .Paste.Timestamp}}</span>
@@ -26,7 +26,7 @@
 
             <div class="buttons">
               <div>
-                <a href="{{$.Url}}raw/{{.Paste.Short}}"><span class="material-icons-outlined">edit</span></a>
+                <a href="{{$.Url}}dashboard/editPaste?short={{.Paste.Short}}"><span class="material-icons-outlined">edit</span></a>
                 <a href="{{$.Url}}raw/{{.Paste.Short}}"><span class="material-icons-outlined">raw_on</span></a>
                 <a href="{{$.Url}}dashboard/switchRestrict?short={{.Paste.Short}}"><span class="material-icons-outlined">key</span></a>
                 <a href="{{$.Url}}dashboard/removePaste?short={{.Paste.Short}}"><span class="material-icons-outlined">delete</span></a>

@@ -84,16 +84,29 @@ func (t template) ChangePerms(c *fiber.Ctx) error {
 	}
 	user, err := t.DB.Users.GetUserByUsername(username)
 	if util.CheckWLogs(err) {
-		return c.Render("response", fiber.Map{
-			"Text":        "Database error",
-			"Destination": "/dashboard",
-		})
+		return c.SendStatus(500)
 	}
 	user.Password = ""
 	return c.Render("changePerms", fiber.Map{
 		"Username": username,
 		"User":     user,
 	})
+}
+
+func (t template) EditPaste(c *fiber.Ctx) error {
+	short := c.Query("short", "")
+	if short == "" {
+		return c.SendStatus(400)
+	}
+	paste, err := t.DB.Pastes.GetPasteByShort(short)
+	if util.CheckWLogs(err) {
+		return c.SendStatus(500)
+	}
+	return c.Render("editPaste", fiber.Map{
+		"Paste": paste,
+		"Url":   t.Url,
+	})
+
 }
 
 func (t template) Login(c *fiber.Ctx) error {

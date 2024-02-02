@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Edit Paste</title>
+        <link rel="stylesheet" href="/static/css/master.css">
+        <link rel="stylesheet" href="/static/css/dashboard.css">
+        <link rel="stylesheet" href="/static/css/paste.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="/static/assets/favicon.ico">
+    </head>
+  <body>
+    <div class="box">
+        <div class="entry removeBottomRadius">
+            <div class="left">
+              <span class="title">{{$.Url}}{{.Paste.Short}}</span>
+              <div class="info">
+                <span>{{.Paste.Author}}</span>
+                <span>{{formatDate .Paste.Timestamp}}</span>
+                {{if .Paste.Restricted}}
+                <span class="material-icons-outlined md-em">lock</span>
+                {{end}}
+              </div>
+            </div>
+        </div>
+        
+       <form action="/dashboard/editPaste" method="post">
+            <textarea name="text" class="pasteText">{{.Paste.Text}}</textarea>
+            <input
+            name="short"
+            type="text"
+            value="{{.Paste.Short}}"
+            readonly
+          />
+            <input type="submit" name="submit" value="Submit" />
+       </form>
+
+    </div>
+  </body>
+</html>

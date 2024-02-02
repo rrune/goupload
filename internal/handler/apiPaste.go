@@ -88,3 +88,20 @@ func (h handler) HandleRemovePaste(c *fiber.Ctx) error {
 	}
 	return c.Redirect("/dashboard")
 }
+
+func (h handler) HandleEditPaste(c *fiber.Ctx) error {
+	short := c.FormValue("short")
+	text := c.FormValue("text")
+
+	if short == "" || text == "" {
+		return c.SendStatus(400)
+	}
+
+	err := h.DB.Pastes.ChangeTextByShort(short, text)
+	if util.CheckWLogs(err) {
+		if short == "" || text == "" {
+			return c.SendStatus(500)
+		}
+	}
+	return c.Redirect("/dashboard")
+}
