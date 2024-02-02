@@ -144,6 +144,9 @@ func (h handler) HandleUploadSimple(c *fiber.Ctx) error {
 
 func (h handler) HandleRemoveFile(c *fiber.Ctx) error {
 	short := c.Params("short", "")
+	if short == "" {
+		return c.SendStatus(400)
+	}
 
 	exist, err := database.CheckIfShortExists(h.DB.Files.DB, short)
 	if util.CheckWLogs(err) || !exist {
