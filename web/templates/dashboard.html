@@ -31,12 +31,12 @@
           </div>
           <div class="right buttons">
             <div>
-              <a href="{{$.Url}}dashboard/details?short={{.Short}}"><span class="material-icons-outlined">info</span></a>
-              <a href="{{$.Url}}dashboard/switchRestrict?short={{.Short}}"><span class="material-icons-outlined">key</span></a>
+              <a href="{{$.Url}}dashboard/details/{{.Short}}"><span class="material-icons-outlined">info</span></a>
+              <a href="{{$.Url}}dashboard/switchRestrict/{{.Short}}"><span class="material-icons-outlined">key</span></a>
             </div>
             <div>
-              <a href="{{$.Url}}dashboard/moveToBlind?short={{.Short}}"><span class="material-icons-outlined">visibility_off</span></a>
-              <a href="{{$.Url}}dashboard/removeFile?short={{.Short}}"><span class="material-icons-outlined">delete</span></a>
+              <a href="{{$.Url}}dashboard/moveToBlind/{{.Short}}"><span class="material-icons-outlined">visibility_off</span></a>
+              <a href="{{$.Url}}dashboard/removeFile/{{.Short}}"><span class="material-icons-outlined">delete</span></a>
             </div>
           </div>
         </div>
@@ -60,9 +60,9 @@
           </div>
           <div class="buttons">
             <div>
-              <a href="{{$.Url}}dashboard/changePerms?username={{.Username}}"><span class="material-icons-outlined">settings</span></a>
-              <a href="{{$.Url}}dashboard/changePassword?username={{.Username}}"><span class="material-icons-outlined">password</span></a>
-              <a href="{{$.Url}}dashboard/removeUser?username={{.Username}}"><span class="material-icons-outlined">delete</span></a>
+              <a href="{{$.Url}}dashboard/changePerms/{{.Username}}"><span class="material-icons-outlined">settings</span></a>
+              <a href="{{$.Url}}dashboard/changePassword/{{.Username}}"><span class="material-icons-outlined">password</span></a>
+              <a href="{{$.Url}}dashboard/removeUser/{{.Username}}"><span class="material-icons-outlined">delete</span></a>
             </div>
           </div>
         </div>
@@ -92,10 +92,10 @@
 
               <div class="buttons">
                 <div>
-                  <a href="{{$.Url}}dashboard/editPaste?short={{.Short}}"><span class="material-icons-outlined">edit</span></a>
+                  <a href="{{$.Url}}dashboard/editPaste/{{.Short}}"><span class="material-icons-outlined">edit</span></a>
                   <!-- <a href="{{$.Url}}raw/{{.Short}}"><span class="material-icons-outlined">raw_on</span></a> -->
-                  <a href="{{$.Url}}dashboard/switchRestrict?short={{.Short}}"><span class="material-icons-outlined">key</span></a>
-                  <a href="{{$.Url}}dashboard/removePaste?short={{.Short}}"><span class="material-icons-outlined">delete</span></a>
+                  <a href="{{$.Url}}dashboard/switchRestrict/{{.Short}}"><span class="material-icons-outlined">key</span></a>
+                  <a href="{{$.Url}}dashboard/removePaste/{{.Short}}"><span class="material-icons-outlined">delete</span></a>
                 </div>
               </div>
             </div>

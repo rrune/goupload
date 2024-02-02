@@ -76,7 +76,10 @@ func (h handler) HandlePaste(c *fiber.Ctx) error {
 }
 
 func (h handler) HandleRemovePaste(c *fiber.Ctx) error {
-	short := c.Query("short", "")
+	short := c.Params("short", "")
+	if short == "" {
+		return c.SendStatus(400)
+	}
 	exist, err := database.CheckIfShortExists(h.DB.Pastes.DB, short)
 	if util.CheckWLogs(err) || !exist {
 		return c.SendStatus(400)

@@ -67,25 +67,25 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 	})
 	dashboard.Get("/", template.Dashboard)
 
-	dashboard.Get("/removeFile", handler.HandleRemoveFile)
-	dashboard.Get("/moveToBlind", handler.HandleMoveToBlind)
-	dashboard.Get("/switchRestrict", handler.HandleSwitchRestrict)
-	dashboard.Get("/details", handler.HandleDetails)
+	dashboard.Get("/removeFile/:short", handler.HandleRemoveFile)
+	dashboard.Get("/moveToBlind/:short", handler.HandleMoveToBlind)
+	dashboard.Get("/switchRestrict/:short", handler.HandleSwitchRestrict)
+	dashboard.Get("/details/:short", handler.HandleDetails)
 
-	dashboard.Get("/removePaste", handler.HandleRemovePaste)
+	dashboard.Get("/removePaste/:short", handler.HandleRemovePaste)
 
-	dashboard.Get("/removeUser", handler.HandleRemoveUser)
+	dashboard.Get("/removeUser/:username", handler.HandleRemoveUser)
 
 	dashboard.Get("/addUser", template.AddUser)
 	dashboard.Post("/addUser", handler.HandleAddUser)
 
-	dashboard.Get("/changePassword", template.ChangePassword)
+	dashboard.Get("/changePassword/:username", template.ChangePassword)
 	dashboard.Post("/changePassword", handler.HandleChangePassword)
 
-	dashboard.Get("/changePerms", template.ChangePerms)
+	dashboard.Get("/changePerms/:username", template.ChangePerms)
 	dashboard.Post("/changePerms", handler.HandleChangePerms)
 
-	dashboard.Get("/editPaste", template.EditPaste)
+	dashboard.Get("/editPaste/:short", template.EditPaste)
 	dashboard.Post("/editPaste", handler.HandleEditPaste)
 
 	app.Get("/:short", handler.HandleShort)

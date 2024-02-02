@@ -68,7 +68,7 @@ func (t template) AddUser(c *fiber.Ctx) error {
 }
 
 func (t template) ChangePassword(c *fiber.Ctx) error {
-	username := c.Query("username", "")
+	username := c.Params("username", "")
 	if username == "" {
 		return c.SendStatus(400)
 	}
@@ -78,7 +78,7 @@ func (t template) ChangePassword(c *fiber.Ctx) error {
 }
 
 func (t template) ChangePerms(c *fiber.Ctx) error {
-	username := c.Query("username", "")
+	username := c.Params("username", "")
 	if username == "" {
 		return c.SendStatus(400)
 	}
@@ -94,7 +94,7 @@ func (t template) ChangePerms(c *fiber.Ctx) error {
 }
 
 func (t template) EditPaste(c *fiber.Ctx) error {
-	short := c.Query("short", "")
+	short := c.Params("short", "")
 	if short == "" {
 		return c.SendStatus(400)
 	}

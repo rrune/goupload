@@ -91,7 +91,10 @@ func (h handler) HandleAddUser(c *fiber.Ctx) error {
 }
 
 func (h handler) HandleRemoveUser(c *fiber.Ctx) error {
-	username := c.Query("username", "")
+	username := c.Params("username", "")
+	if username == "" {
+		return c.SendStatus(400)
+	}
 	err := h.DB.Users.RemoveUserByUsername(username)
 	if util.CheckWLogs(err) {
 		return c.SendStatus(500)

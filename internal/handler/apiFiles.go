@@ -143,7 +143,7 @@ func (h handler) HandleUploadSimple(c *fiber.Ctx) error {
 }
 
 func (h handler) HandleRemoveFile(c *fiber.Ctx) error {
-	short := c.Query("short", "")
+	short := c.Params("short", "")
 
 	exist, err := database.CheckIfShortExists(h.DB.Files.DB, short)
 	if util.CheckWLogs(err) || !exist {
@@ -167,7 +167,10 @@ func (h handler) HandleRemoveFile(c *fiber.Ctx) error {
 }
 
 func (h handler) HandleMoveToBlind(c *fiber.Ctx) error {
-	short := c.Query("short", "")
+	short := c.Params("short", "")
+	if short == "" {
+		return c.SendStatus(400)
+	}
 	file, err := h.DB.Files.GetFileByShort(short)
 	if err == nil {
 		err = os.Rename("./data/uploads/"+file.Filename, "./data/blind/"+file.Filename)
@@ -182,7 +185,10 @@ func (h handler) HandleMoveToBlind(c *fiber.Ctx) error {
 }
 
 func (h handler) HandleDetails(c *fiber.Ctx) error {
-	short := c.Query("short", "")
+	short := c.Params("short", "")
+	if short == "" {
+		return c.SendStatus(400)
+	}
 	file, err := h.DB.Files.GetFileByShort(short)
 	var info os.FileInfo
 	if err == nil {

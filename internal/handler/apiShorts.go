@@ -60,7 +60,10 @@ func (h handler) HandleShortsRaw(c *fiber.Ctx) error {
 }
 
 func (h handler) HandleSwitchRestrict(c *fiber.Ctx) error {
-	short := c.Query("short", "")
+	short := c.Params("short", "")
+	if short == "" {
+		return c.SendStatus(400)
+	}
 	err := h.DB.Shorts.SwitchRestrict(short)
 	if util.CheckWLogs(err) {
 		return c.SendStatus(500)
