@@ -42,7 +42,7 @@ func (h handler) HandleShortsRaw(c *fiber.Ctx) error {
 			util.CheckWLogs(err)
 
 			if short.Restricted {
-				return c.Redirect("/r/" + c.Params("short"))
+				return c.Redirect("/raw/r/" + c.Params("short"))
 			}
 		}
 
