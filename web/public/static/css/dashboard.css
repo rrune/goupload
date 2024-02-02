@@ -18,6 +18,15 @@
     justify-content: space-between;
 
     overflow-x: scroll;
+  
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.entry:-webkit-scrollbar {
+    display: none;
 }
 
 .entry .left {
