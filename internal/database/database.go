@@ -8,7 +8,7 @@ import (
 )
 
 func New(c models.Config) Database {
-	dsn := c.Username + ":" + c.Password + "@" + c.Address + "?parseTime=true"
+	dsn := c.DBUsername + ":" + c.DBPassword + "@" + c.DBAddress + "?parseTime=true"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	util.CheckPanic(err)
 	d := Database{

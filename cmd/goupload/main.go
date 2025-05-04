@@ -28,5 +28,19 @@ func main() {
 
 	db := database.New(config)
 
+	// create new user if no user exists
+	users, err := db.Users.GetAllUsers()
+	util.CheckPanic(err)
+	if len(users) == 0 {
+		db.Users.CreateUser(&models.User{
+			Username:   config.Username,
+			Password:   config.Password,
+			Root:       true,
+			Blind:      true,
+			Onetime:    false,
+			Restricted: true,
+		})
+	}
+
 	handler.Start(config.Port, config.JWTKey, config.Url, config.UploadLimit, db)
 }

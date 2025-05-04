@@ -6,12 +6,14 @@ type Config struct {
 	Url         string `yaml:"url"`
 	Port        string `yaml:"port"`
 	Type        string `yaml:"dbtype"`
-	Username    string `yaml:"username"`
-	Password    string `yaml:"password"`
-	Address     string `yaml:"address"`
+	DBUsername  string `yaml:"dbusername"`
+	DBPassword  string `yaml:"dbpassword"`
+	DBAddress   string `yaml:"dbaddress"`
 	JWTKey      string `yaml:"jwtkey"`
 	ShortLength int    `yaml:"shortlength"`
 	UploadLimit int    `yaml:"uploadLimit"`
+	Username    string `yaml:"username"`
+	Password    string `yaml:"password"`
 }
 
 type User struct {

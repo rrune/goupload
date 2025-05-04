@@ -15,14 +15,14 @@ CREATE TABLE Shorts (
     Ip varchar(255) NOT NULL DEFAULT '0.0.0.0',
     Restricted tinyint(1) NOT NULL,
     Downloads int(11) NOT NULL DEFAULT 0
-)
+);
 
 CREATE TABLE Files (
     Short varchar(255) NOT NULL UNIQUE,
-    Filename varchar(255) NOT NULL UNIQUE,
+    Filename varchar(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE Pastes (
     Short varchar(255) NOT NULL UNIQUE,
-    Text text NOT NULL,
+    Text text NOT NULL
 );
