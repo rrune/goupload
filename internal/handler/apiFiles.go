@@ -105,6 +105,7 @@ func (h handler) HandleUploadWeb(c *fiber.Ctx) error {
 }
 
 // simpler upload to use with curl
+// curl -u "username:password" -F file=@file.txt https://files.qnd.be
 func (h handler) HandleUploadSimple(c *fiber.Ctx) error {
 	// uses simple auth, there are no other permission checks prior to this one
 	authBase64 := strings.Split(c.Get("Authorization"), " ")
