@@ -33,6 +33,7 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 		Views:                   engine,
 		BodyLimit:               uploadLimit * 1024 * 1024,
 		EnableTrustedProxyCheck: true,
+		ProxyHeader:             fiber.HeaderXForwardedFor,
 	})
 
 	auth := jwtware.New(jwtware.Config{
