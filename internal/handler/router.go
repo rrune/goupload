@@ -30,10 +30,9 @@ func Start(port string, jwtkey string, url string, uploadLimit int, db database.
 		},
 	)
 	app := fiber.New(fiber.Config{
-		Views:                   engine,
-		BodyLimit:               uploadLimit * 1024 * 1024,
-		EnableTrustedProxyCheck: true,
-		ProxyHeader:             fiber.HeaderXForwardedFor,
+		Views:       engine,
+		BodyLimit:   uploadLimit * 1024 * 1024,
+		ProxyHeader: fiber.HeaderXForwardedFor,
 	})
 
 	auth := jwtware.New(jwtware.Config{
